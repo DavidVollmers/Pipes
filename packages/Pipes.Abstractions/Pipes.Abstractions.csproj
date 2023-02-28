@@ -1,13 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <PackageId>DavidVollmers.Pipes.Abstractions</PackageId>
+        <Authors>github@david.vollmers.org</Authors>
+        <Description>Abstractions for DavidVollmers.Pipes.</Description>
+        <PackageProjectUrl>https://github.com/DavidVollmers/pipes</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Pipes" />
+        <InternalsVisibleTo Include="Pipes"/>
     </ItemGroup>
 
 </Project>
