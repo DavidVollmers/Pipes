@@ -7,6 +7,13 @@ public abstract class PipeBuilder : IEnumerable<Pipeable>
 {
     private readonly IList<Pipeable> _pipeables = new List<Pipeable>();
 
+    public int Length => _pipeables.Count;
+
+    public IPipe? Build(object? input = null)
+    {
+        
+    }
+
     public PipeBuilder Add(Pipeable pipeable)
     {
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));

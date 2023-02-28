@@ -1,6 +1,6 @@
 ﻿namespace Pipes;
 
-public sealed class PipeResult<T>
+public sealed class PipeResult<TResult>
 {
-    public T? Result { get; internal set; }
+    public TResult? Result { get; internal set; }
 }

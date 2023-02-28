@@ -21,6 +21,8 @@ public abstract class Pipeable
 
 public abstract class Pipeable<TInput, TOutput> : Pipeable
 {
+    public abstract TInput ConvertInput(object input);
+    
     public virtual TOutput? Execute(IPipe<TInput, TOutput> pipe)
     {
         base.Execute(pipe);
