@@ -2,9 +2,9 @@
 
 namespace Pipes;
 
-public static class PipelineBuilderExtensions
+public static class PipeBuilderExtensions
 {
-    public static PipelineBuilder Add<TInput, TOutput>(this PipelineBuilder builder, Pipeable<TInput, TOutput> pipeable)
+    public static PipeBuilder Add<TInput, TOutput>(this PipeBuilder builder, Pipeable<TInput, TOutput> pipeable)
     {
         if (builder == null) throw new ArgumentNullException(nameof(builder));
         builder.Add(pipeable);

@@ -3,11 +3,11 @@ using Pipes.Abstractions;
 
 namespace Pipes;
 
-public abstract class PipelineBuilder : IEnumerable<Pipeable>
+public abstract class PipeBuilder : IEnumerable<Pipeable>
 {
     private readonly IList<Pipeable> _pipeables = new List<Pipeable>();
 
-    public PipelineBuilder Add(Pipeable pipeable)
+    public PipeBuilder Add(Pipeable pipeable)
     {
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
         _pipeables.Add(pipeable);

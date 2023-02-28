@@ -4,11 +4,11 @@ namespace Pipes.IO;
 
 public class ReadFileContentAsync : Pipeable<SingleFileInput, Stream>
 {
-    public override async Task<Stream?> ExecuteAsync(Pipeline<SingleFileInput, Stream> pipeline)
+    public override async Task<Stream?> ExecuteAsync(IPipe<SingleFileInput, Stream> pipe)
     {
-        if (pipeline.Input.File == null) throw new PipelineInputNullException(nameof(SingleFileInput.File));
+        if (pipe.Input.File == null) throw new PipeInputNullException(nameof(SingleFileInput.File));
 
-        var fileStream = File.OpenRead(pipeline.Input.File.FullName);
+        var fileStream = File.OpenRead(pipe.Input.File.FullName);
 
         var stream = new MemoryStream();
         await fileStream.CopyToAsync(stream).ConfigureAwait(false);

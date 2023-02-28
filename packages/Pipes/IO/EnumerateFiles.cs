@@ -4,14 +4,14 @@ namespace Pipes.IO;
 
 public sealed class EnumerateFiles : Pipeable<EnumerateFilesInput, IEnumerable<string>>
 {
-    public override IEnumerable<string> Execute(Pipeline<EnumerateFilesInput, IEnumerable<string>> pipeline)
+    public override IEnumerable<string> Execute(IPipe<EnumerateFilesInput, IEnumerable<string>> pipe)
     {
-        if (pipeline.Input.SearchPattern == null)
-            throw new PipelineInputNullException(nameof(EnumerateFilesInput.SearchPattern));
+        if (pipe.Input.SearchPattern == null)
+            throw new PipeInputNullException(nameof(EnumerateFilesInput.SearchPattern));
 
         var paths =
-            Directory.EnumerateFiles(pipeline.Input.WorkingDirectory.FullName, pipeline.Input.SearchPattern,
-                pipeline.Input.SearchOption);
+            Directory.EnumerateFiles(pipe.Input.WorkingDirectory.FullName, pipe.Input.SearchPattern,
+                pipe.Input.SearchOption);
 
         return paths;
     }

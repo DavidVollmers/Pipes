@@ -2,41 +2,41 @@
 
 public abstract class Pipeable
 {
-    public virtual void Execute(Pipeline pipeline)
+    public virtual void Execute(IPipe pipe)
     {
     }
 
-    public virtual Task ExecuteAsync(Pipeline pipeline)
+    public virtual Task ExecuteAsync(IPipe pipe)
     {
-        Execute(pipeline);
+        Execute(pipe);
 
         return Task.CompletedTask;
     }
 
-    public virtual Task ExecuteAsync(Pipeline pipeline, CancellationToken cancellationToken)
+    public virtual Task ExecuteAsync(IPipe pipe, CancellationToken cancellationToken)
     {
-        return ExecuteAsync(pipeline);
+        return ExecuteAsync(pipe);
     }
 }
 
 public abstract class Pipeable<TInput, TOutput> : Pipeable
 {
-    public virtual TOutput? Execute(Pipeline<TInput, TOutput> pipeline)
+    public virtual TOutput? Execute(IPipe<TInput, TOutput> pipe)
     {
-        base.Execute(pipeline);
+        base.Execute(pipe);
 
         return default;
     }
 
-    public virtual Task<TOutput?> ExecuteAsync(Pipeline<TInput, TOutput> pipeline)
+    public virtual Task<TOutput?> ExecuteAsync(IPipe<TInput, TOutput> pipe)
     {
-        var result = Execute(pipeline);
+        var result = Execute(pipe);
 
         return Task.FromResult(result);
     }
 
-    public virtual Task<TOutput?> ExecuteAsync(Pipeline<TInput, TOutput> pipeline, CancellationToken cancellationToken)
+    public virtual Task<TOutput?> ExecuteAsync(IPipe<TInput, TOutput> pipe, CancellationToken cancellationToken)
     {
-        return ExecuteAsync(pipeline);
+        return ExecuteAsync(pipe);
     }
 }

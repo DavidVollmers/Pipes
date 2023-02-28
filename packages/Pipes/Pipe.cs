@@ -1,6 +1,6 @@
 ﻿namespace Pipes;
 
-public class Pipe : PipelineBuilder
+public class Pipe : PipeBuilder
 {
     public void Execute()
     {
@@ -11,7 +11,7 @@ public class Pipe : PipelineBuilder
     }
 }
 
-public class Pipe<TInput, TOutput> : PipelineBuilder
+public class Pipe<TInput, TOutput> : PipeBuilder
 {
     public TOutput? Execute(TInput input)
     {
@@ -19,5 +19,6 @@ public class Pipe<TInput, TOutput> : PipelineBuilder
 
     public async Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
     {
+        
     }
 }
