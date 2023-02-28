@@ -3,6 +3,19 @@ using Pipes.Abstractions;
 
 namespace Pipes;
 
+public class Pipe : Pipe<object, object>
+{
+    public void Execute()
+    {
+        Execute(null);
+    }
+
+    public Task ExecuteAsync()
+    {
+        return ExecuteAsync(null);
+    }
+}
+
 public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, object>>
 {
     private readonly IList<Pipeable<object, object>> _pipeables = new List<Pipeable<object, object>>();
@@ -13,11 +26,9 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
     {
         base.Output = null;
     }
-
-    public TOutput? Execute(TInput input)
+    
+    public TOutput? Execute(TInput? input)
     {
-        if (input == null) throw new ArgumentNullException(nameof(input));
-
         if (Output != null) return Output;
 
         var pipe = Build();
@@ -27,10 +38,8 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
         return Output;
     }
 
-    public async Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
+    public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
-        if (input == null) throw new ArgumentNullException(nameof(input));
-
         if (Output != null) return Output;
 
         var pipe = Build();

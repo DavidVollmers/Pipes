@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pipeables" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\packages\Pipes\Pipes.csproj" />
     </ItemGroup>
 

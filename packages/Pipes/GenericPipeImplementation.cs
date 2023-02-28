@@ -6,6 +6,12 @@ internal class GenericPipeImplementation<TInput, TOutput> : IPipe<TInput, TOutpu
 {
     private readonly IPipe<object, object> _inner;
 
+    public bool Used
+    {
+        get => _inner.Used;
+        set => _inner.Used = value;
+    }
+
     public TInput? Input => (TInput?)_inner.Input;
 
     public GenericPipeImplementation(IPipe<object, object> inner)
