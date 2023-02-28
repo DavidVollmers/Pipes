@@ -8,10 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C3CBCD9E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipes.Tests", "tests\Pipes.Tests\Pipes.Tests.csproj", "{54C3E540-3649-43F5-A124-40D6E384B4CD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{054F8BC4-52C8-4684-BEA5-02E524DD5964}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipes.Demos.Cli", "demos\Pipes.Demos.Cli\Pipes.Demos.Cli.csproj", "{031A172B-CF0C-471A-86B9-0A59115815FC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,13 +26,8 @@ Global
 		{54C3E540-3649-43F5-A124-40D6E384B4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54C3E540-3649-43F5-A124-40D6E384B4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54C3E540-3649-43F5-A124-40D6E384B4CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{031A172B-CF0C-471A-86B9-0A59115815FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{031A172B-CF0C-471A-86B9-0A59115815FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{031A172B-CF0C-471A-86B9-0A59115815FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{031A172B-CF0C-471A-86B9-0A59115815FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{54C3E540-3649-43F5-A124-40D6E384B4CD} = {C3CBCD9E-E120-4796-A8F3-CDA4F8415581}
-		{031A172B-CF0C-471A-86B9-0A59115815FC} = {054F8BC4-52C8-4684-BEA5-02E524DD5964}
 	EndGlobalSection
 EndGlobal
