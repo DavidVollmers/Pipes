@@ -23,7 +23,7 @@ public sealed class EnumerateFiles : Pipeable<EnumerateFilesInput, IEnumerable<s
         throw new PipeInputNotSupportedException(input.GetType(), typeof(EnumerateFilesInput));
     }
 
-    public override IEnumerable<string> Execute(IPipe<EnumerateFilesInput, IEnumerable<string>> pipe)
+    public override void Execute(IPipe<EnumerateFilesInput, IEnumerable<string>> pipe)
     {
         if (pipe.Input.SearchPattern == null)
             throw new PipeInputNullException(nameof(EnumerateFilesInput.SearchPattern));
@@ -31,7 +31,7 @@ public sealed class EnumerateFiles : Pipeable<EnumerateFilesInput, IEnumerable<s
         var paths =
             Directory.EnumerateFiles(pipe.Input.WorkingDirectory.FullName, pipe.Input.SearchPattern,
                 pipe.Input.SearchOption);
-
-        return paths;
+        
+        pipe.Pipe(paths);
     }
 }

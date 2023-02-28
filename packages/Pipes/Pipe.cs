@@ -1,39 +1,22 @@
 ﻿namespace Pipes;
 
-public class Pipe : PipeBuilder
-{
-    public void Execute()
-    {
-        if (Length == 0) return;
-
-        var pipe = Build();
-        return pipe.Pipe();
-    }
-
-    public Task ExecuteAsync(CancellationToken cancellationToken = default)
-    {
-        if (Length == 0) return Task.CompletedTask;
-        
-        var pipe = Build();
-        return pipe.PipeAsync(cancellationToken);
-    }
-}
-
 public class Pipe<TInput, TOutput> : PipeBuilder
 {
     public TOutput? Execute(TInput input)
     {
-        if (Length == 0) return default;
-
-        var pipe = Build(input);
-        return pipe.Pipe<TOutput>(input);
+        throw new NotImplementedException();
     }
 
-    public Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
+    public async Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
     {
-        if (Length == 0) return Task.FromResult(default(TOutput));
-
+        if (input == null) throw new ArgumentNullException(nameof(input));
+        
         var pipe = Build(input);
-        return pipe.PipeAsync<TOutput>(input, cancellationToken);
+        if (pipe == null) return default;
+        
+        await pipe.PipeAsync(input, cancellationToken).ConfigureAwait(false);
+        
+        //TODO
+        return default;
     }
 }
