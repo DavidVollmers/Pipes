@@ -1,35 +1,23 @@
 ﻿namespace Pipes;
 
-public abstract class PipeBase<T> : PipelineBuilder
+public class Pipe : PipelineBuilder
 {
-    public PipeResult<T> Execute()
+    public void Execute()
     {
-        var task = ExecuteAsync();
-
-        task.Wait();
-
-        return task.Result;
     }
 
-    public Task<PipeResult<T>> ExecuteAsync()
+    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new PipeResult<T>());
     }
 }
 
-public class Pipe : PipeBase<object>
-{
-}
-
-public class Pipe<TInput, TOutput> : PipeBase<TOutput>
+public class Pipe<TInput, TOutput> : PipelineBuilder
 {
     public TOutput? Execute(TInput input)
     {
-        return default;
     }
 
-    public Task<TOutput?> ExecuteAsync(TInput input)
+    public async Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(default(TOutput));
     }
 }

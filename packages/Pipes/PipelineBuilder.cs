@@ -3,7 +3,7 @@ using Pipes.Abstractions;
 
 namespace Pipes;
 
-public class PipelineBuilder : IEnumerable<Pipeable>
+public abstract class PipelineBuilder : IEnumerable<Pipeable>
 {
     private readonly IList<Pipeable> _pipeables = new List<Pipeable>();
 

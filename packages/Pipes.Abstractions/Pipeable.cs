@@ -12,6 +12,11 @@ public abstract class Pipeable
 
         return Task.CompletedTask;
     }
+
+    public virtual Task ExecuteAsync(Pipeline pipeline, CancellationToken cancellationToken)
+    {
+        return ExecuteAsync(pipeline);
+    }
 }
 
 public abstract class Pipeable<TInput, TOutput> : Pipeable
@@ -28,5 +33,10 @@ public abstract class Pipeable<TInput, TOutput> : Pipeable
         var result = Execute(pipeline);
 
         return Task.FromResult(result);
+    }
+
+    public virtual Task<TOutput?> ExecuteAsync(Pipeline<TInput, TOutput> pipeline, CancellationToken cancellationToken)
+    {
+        return ExecuteAsync(pipeline);
     }
 }
