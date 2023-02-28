@@ -5,11 +5,11 @@
         <Authors>github@david.vollmers.org</Authors>
         <Copyright>David Vollmers</Copyright>
         <Description>Abstractions for DavidVollmers.Pipes.</Description>
-        <PackageProjectUrl>https://github.com/DavidVollmers/pipes</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/DavidVollmers/Pipes</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/DavidVollmers/pipes.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/DavidVollmers/Pipes.git</RepositoryUrl>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
