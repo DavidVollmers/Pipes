@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  push:
+    branches: [ '*' ]
+    paths-ignore:
+      - 'demos/**'
+
+jobs:
+  Run_Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
