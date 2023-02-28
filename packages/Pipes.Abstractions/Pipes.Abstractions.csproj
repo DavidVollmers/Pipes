@@ -3,16 +3,24 @@
     <PropertyGroup>
         <PackageId>DavidVollmers.Pipes.Abstractions</PackageId>
         <Authors>github@david.vollmers.org</Authors>
+        <Copyright>David Vollmers</Copyright>
         <Description>Abstractions for DavidVollmers.Pipes.</Description>
         <PackageProjectUrl>https://github.com/DavidVollmers/pipes</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/DavidVollmers/pipes.git</RepositoryUrl>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Pipes" />
+        <InternalsVisibleTo Include="Pipes"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

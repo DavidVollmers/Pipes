@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
+    tags-ignore: '**'
     paths-ignore:
       - 'demos/**'
   pull_request:
+    paths-ignore:
+      - 'demos/**'
 
 jobs:
   Tests:
