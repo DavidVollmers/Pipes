@@ -28,7 +28,7 @@ internal sealed class PipeImplementation : IPipe<object, object>
 
         var pipeable = _pipe[_currentPipeLocation];
 
-        var pipe = new PipeImplementation(_pipe, _currentPipeLocation + 1, pipeable.ConvertInput(Input));
+        var pipe = new PipeImplementation(_pipe, _currentPipeLocation + 1, pipeable.ConvertInput(Input)!);
 
         await pipeable.ExecuteAsync(pipe!, cancellationToken).ConfigureAwait(false);
     }
