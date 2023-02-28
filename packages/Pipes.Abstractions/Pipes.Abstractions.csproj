@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Pipes"/>
+        <InternalsVisibleTo Include="Pipes" />
     </ItemGroup>
 
 </Project>
