@@ -7,7 +7,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 {
     private readonly IList<Pipeable<object, object>> _pipeables = new List<Pipeable<object, object>>();
 
-    public new TOutput? Output => base.Output == null ? default : (TOutput)base.Output;
+    public new TOutput? Output => (TOutput?)base.Output;
 
     public void Reset()
     {
