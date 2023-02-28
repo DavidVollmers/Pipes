@@ -1,31 +1,27 @@
-﻿using Pipes.Abstractions;
+﻿namespace Pipes;
 
-namespace Pipes;
-
-public class Pipe
+public abstract class PipeBase<T> : PipelineBuilder
 {
-    public Pipe Append<TPipeInput, TPipeOutput>(IPipeable<TPipeInput, TPipeOutput> pipeable)
+    public PipeResult<T> Execute()
     {
-        return this;
+        var task = ExecuteAsync();
+
+        task.Wait();
+
+        return task.Result;
     }
 
-    public Pipe Append<TPipeInput, TPipeOutput>(IAsyncPipeable<TPipeInput, TPipeOutput> pipeable)
+    public Task<PipeResult<T>> ExecuteAsync()
     {
-        return this;
-    }
-
-    public void Execute()
-    {
-        ExecuteAsync().Wait();
-    }
-
-    public Task ExecuteAsync()
-    {
-        return Task.CompletedTask;
+        return Task.FromResult(new PipeResult<T>());
     }
 }
 
-public class Pipe<TInput, TOutput> : Pipe
+public class Pipe : PipeBase<object>
+{
+}
+
+public class Pipe<TInput, TOutput> : PipeBase<TOutput>
 {
     public TOutput? Execute(TInput input)
     {
