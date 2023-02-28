@@ -1,10 +1,10 @@
 ﻿namespace Pipes.IO;
 
-public class FileBasedInput
+public class FileBasedOptions
 {
     public DirectoryInfo WorkingDirectory { get; set; }
 
-    public FileBasedInput()
+    public FileBasedOptions()
     {
         WorkingDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
     }

@@ -1,21 +1,29 @@
 ﻿namespace Pipes.Abstractions;
 
-//TODO
-// public abstract class Pipeable : Pipeable<object, object>
-// {
-// }
-
 public abstract class Pipeable<TInput, TOutput>
 {
-    public abstract TInput? ConvertInput(object input);
+    private bool _used;
+
+    internal void Reset()
+    {
+        _used = false;
+    }
+
+    public abstract TInput? ConvertInput(object? input);
 
     public virtual void Execute(IPipe<TInput, TOutput?> pipe)
     {
-        pipe.Pipe(default);
+        if (_used) return;
+        _used = true;
+
+        ExecuteAsync(pipe).Wait();
     }
 
     public virtual Task ExecuteAsync(IPipe<TInput, TOutput?> pipe)
     {
+        if (_used) return Task.CompletedTask;
+        _used = true;
+
         Execute(pipe);
 
         return Task.CompletedTask;

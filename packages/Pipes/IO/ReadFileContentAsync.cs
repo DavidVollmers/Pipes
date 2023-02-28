@@ -2,34 +2,42 @@
 
 namespace Pipes.IO;
 
-public class ReadFileContentAsync : Pipeable<SingleFileInput, Stream>
+public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
 {
-    public override SingleFileInput ConvertInput(object input)
+    public override SingleFileOptions? ConvertInput(object? input)
     {
+        if (input == null) return null;
+
         if (input is string path)
-            return new SingleFileInput
+            return new SingleFileOptions
             {
                 File = new FileInfo(path)
             };
 
+        if (input is IEnumerable<string> paths)
+            return new SingleFileOptions
+            {
+                File = new FileInfo(paths.Single())
+            };
+
         if (input is FileInfo file)
-            return new SingleFileInput
+            return new SingleFileOptions
             {
                 File = file
             };
 
-        if (input is FileBasedInput fileBasedInput)
-            return new SingleFileInput
+        if (input is FileBasedOptions fileBasedInput)
+            return new SingleFileOptions
             {
                 WorkingDirectory = fileBasedInput.WorkingDirectory
             };
 
-        throw new PipeInputNotSupportedException(input.GetType(), typeof(SingleFileInput));
+        throw new PipeInputNotSupportedException(input.GetType(), typeof(SingleFileOptions));
     }
 
-    public override async Task ExecuteAsync(IPipe<SingleFileInput, Stream> pipe)
+    public override async Task ExecuteAsync(IPipe<SingleFileOptions, Stream> pipe)
     {
-        if (pipe.Input.File == null) throw new PipeInputNullException(nameof(SingleFileInput.File));
+        if (pipe.Input?.File == null) throw new PipeInputNullException(nameof(SingleFileOptions.File));
 
         var fileStream = File.OpenRead(pipe.Input.File.FullName);
 

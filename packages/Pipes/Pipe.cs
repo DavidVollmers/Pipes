@@ -1,22 +1,65 @@
-﻿namespace Pipes;
+﻿using System.Collections;
+using Pipes.Abstractions;
 
-public class Pipe<TInput, TOutput> : PipeBuilder
+namespace Pipes;
+
+public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, object>>
 {
+    private readonly IList<Pipeable<object, object>> _pipeables = new List<Pipeable<object, object>>();
+
+    public new TOutput? Output => base.Output == null ? default : (TOutput)base.Output;
+
+    public void Reset()
+    {
+        base.Output = null;
+    }
+
     public TOutput? Execute(TInput input)
     {
-        throw new NotImplementedException();
+        if (input == null) throw new ArgumentNullException(nameof(input));
+
+        if (Output != null) return Output;
+
+        var pipe = Build();
+
+        pipe?.Pipe(input);
+
+        return Output;
     }
 
     public async Task<TOutput?> ExecuteAsync(TInput input, CancellationToken cancellationToken = default)
     {
         if (input == null) throw new ArgumentNullException(nameof(input));
-        
-        var pipe = Build(input);
+
+        if (Output != null) return Output;
+
+        var pipe = Build();
         if (pipe == null) return default;
-        
+
         await pipe.PipeAsync(input, cancellationToken).ConfigureAwait(false);
-        
-        //TODO
-        return default;
+
+        return Output;
+    }
+
+    private IPipe<object, object>? Build()
+    {
+        return _pipeables.Count == 0 ? null : new PipeImplementation(this, _pipeables, 0, null);
+    }
+
+    public Pipe<TInput, TOutput> Add(Pipeable<object, object> pipeable)
+    {
+        if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
+        _pipeables.Add(pipeable);
+        return this;
+    }
+
+    public IEnumerator<Pipeable<object, object>> GetEnumerator()
+    {
+        return _pipeables.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

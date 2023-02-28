@@ -11,7 +11,7 @@ internal class GenericPipeable<TInput, TOutput> : Pipeable<object, object>
         _inner = inner;
     }
 
-    public override object? ConvertInput(object input)
+    public override object? ConvertInput(object? input)
     {
         return _inner.ConvertInput(input);
     }

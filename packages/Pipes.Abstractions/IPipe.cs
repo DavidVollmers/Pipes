@@ -2,7 +2,7 @@
 
 public interface IPipe<out TInput, in TOutput>
 {
-    public TInput Input { get; }
+    public TInput? Input { get; }
 
     void Pipe(TOutput? input);
 
