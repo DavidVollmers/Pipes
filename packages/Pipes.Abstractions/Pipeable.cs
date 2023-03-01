@@ -1,9 +1,12 @@
 ﻿namespace Pipes.Abstractions;
 
+public abstract class Pipeable : Pipeable<object, object>
+{
+}
+
 public abstract class Pipeable<TInput, TOutput>
 {
     public abstract TInput? ConvertInput(object? input);
-
     
     public virtual void Execute(IPipe<TInput, TOutput?> pipe)
     {

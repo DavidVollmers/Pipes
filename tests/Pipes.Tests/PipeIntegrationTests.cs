@@ -28,5 +28,7 @@ public class PipeIntegrationTests
         using var reader = new StreamReader(result!);
         var content = await reader.ReadToEndAsync();
         Assert.Equal(expectedContent, content);
+        
+        Assert.Equal(pipe.Output, result);
     }
 }

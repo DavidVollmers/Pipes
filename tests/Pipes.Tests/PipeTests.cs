@@ -10,21 +10,31 @@ public class PipeTests
         var pipe = new Pipe();
 
         pipe.Execute();
+
+        Assert.Null(pipe.Output);
     }
 
     [Fact]
-    public void Test_Execute_EmptyPipeable()
+    public async Task Test_ExecuteAsync_NoPipeables()
     {
-        var emptyPipeable1 = new EmptyPipeable();
+        var pipe = new Pipe();
 
-        var pipe = new Pipe
+        await pipe.ExecuteAsync();
+
+        Assert.Null(pipe.Output);
+    }
+
+    [Fact]
+    public async Task Test_Output_IsCached()
+    {
+        var i = new Random().Next();
+        var pipe = new Pipe<int, int>
         {
-            emptyPipeable1
+            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
-        var exception = Assert.Throws<InvalidOperationException>(() => pipe.Execute());
-        Assert.Equal(
-            "Pipe was not executed properly. Make sure to either call .Pipe() or .PipeAsync() when implementing custom pipeables.",
-            exception.Message);
+        var result = await pipe.ExecuteAsync(i);
+        Assert.Equal(i * 2, result);
+        Assert.Equal(i * 2, pipe.Output);
     }
 }

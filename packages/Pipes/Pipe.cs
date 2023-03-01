@@ -30,7 +30,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     public TOutput? Execute(TInput? input)
     {
-        if (Output != null) return Output;
+        if (!EqualityComparer<TOutput>.Default.Equals(Output, default)) return Output;
 
         var pipe = Build(default);
         if (pipe == null) return default;
@@ -42,7 +42,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
-        if (Output != null) return Output;
+        if (!EqualityComparer<TOutput>.Default.Equals(Output, default)) return Output;
 
         var pipe = Build(cancellationToken);
         if (pipe == null) return default;

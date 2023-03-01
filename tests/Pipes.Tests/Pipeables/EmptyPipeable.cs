@@ -2,7 +2,7 @@
 
 namespace Pipes.Tests.Pipeables;
 
-public class EmptyPipeable : Pipeable<object, object>
+public class EmptyPipeable : Pipeable
 {
     public override object? ConvertInput(object? input)
     {

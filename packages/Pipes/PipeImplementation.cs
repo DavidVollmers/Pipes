@@ -58,8 +58,6 @@ internal sealed class PipeImplementation : PipeBase
 
     private PipeBase GetNextPipe(object? input, CancellationToken cancellationToken)
     {
-        if (_nextPipeLocation >= _pipeables.Length) throw new InvalidOperationException("Nothing to pipe through.");
-
         var convertedInput = _pipeables[_nextPipeLocation].ConvertInput(input);
 
         if (_nextPipeLocation == _pipeables.Length - 1) return new OutputPipe(_output, convertedInput);
