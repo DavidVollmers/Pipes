@@ -30,8 +30,8 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     public TOutput? Execute(TInput? input)
     {
-        if (!EqualityComparer<TOutput>.Default.Equals(Output, default)) return Output;
-
+        Reset();
+        
         var pipe = Build(default);
         if (pipe == null) return default;
 
@@ -42,8 +42,8 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
-        if (!EqualityComparer<TOutput>.Default.Equals(Output, default)) return Output;
-
+        Reset();
+        
         var pipe = Build(cancellationToken);
         if (pipe == null) return default;
 
@@ -54,10 +54,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     private TOutput? VerifyOutput()
     {
-        if (Pipe?.Used == null)
-            throw new InvalidOperationException(PipeImplementation.PipeNotExecutedProperlyException);
-
-        if (Pipe.Output == null) return Output = default;
+        if (Pipe!.Output == null) return Output = default;
 
         //TODO support output conversion
         if (Pipe.Output is not TOutput output)

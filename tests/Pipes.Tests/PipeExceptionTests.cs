@@ -67,4 +67,28 @@ public class PipeExceptionTests
             "Pipe already used. Make sure to only make one call to either .Pipe() or .PipeAsync() when implementing custom pipeables.",
             exception.Message);
     }
+
+    [Fact]
+    public async Task Test_VerifyOutput_OutputTypeNotSupported()
+    {
+        var output = "Not an Integer";
+        var pipe = new Pipe<object, int>
+        {
+            new PipeableDelegate(i => i, p => p.Pipe(output))
+        };
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => pipe.ExecuteAsync(0));
+        Assert.Equal(
+            $"Output of type \"{output.GetType().FullName}\" is not supported. Expected output type \"{typeof(int).FullName}\".",
+            exception.Message);
+    }
+
+    [Fact]
+    public void Test_Add_PipeableIsNull()
+    {
+        var pipe = new Pipe();
+
+        var exception = Assert.Throws<ArgumentNullException>(() => pipe.Add(null));
+        Assert.Equal("pipeable", exception.ParamName);
+    }
 }

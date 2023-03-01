@@ -4,7 +4,7 @@ namespace Pipes;
 
 internal sealed class PipeImplementation : PipeBase
 {
-    internal const string PipeNotExecutedProperlyException =
+    private const string PipeNotExecutedProperlyException =
         "Pipe was not executed properly. Make sure to either call .Pipe() or .PipeAsync() when implementing custom pipeables.";
 
     private readonly PipeOutput _output;

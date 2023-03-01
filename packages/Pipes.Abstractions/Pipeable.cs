@@ -4,6 +4,7 @@ public abstract class Pipeable : Pipeable<object, object>
 {
 }
 
+//TODO introduce IPipeable interface
 public abstract class Pipeable<TInput, TOutput>
 {
     public abstract TInput? ConvertInput(object? input);
