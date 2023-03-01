@@ -8,15 +8,9 @@ public sealed class EnumerateFiles : Pipeable<EnumerateFilesOptions, IEnumerable
     {
         if (input == null) return null;
 
-        if (input is EnumerateFilesOptions enumerateFilesInput) return enumerateFilesInput;
+        if (InputConverter.TryConvertInput(input, out EnumerateFilesOptions? convertedInput)) return convertedInput;
 
-        if (input is FileSystemBasedOptions fileBasedInput)
-            return new EnumerateFilesOptions
-            {
-                WorkingDirectory = fileBasedInput.WorkingDirectory
-            };
-
-        if (input is string searchPattern)
+        if (InputConverter.TryConvertInput(input, out string? searchPattern))
             return new EnumerateFilesOptions
             {
                 SearchPattern = searchPattern

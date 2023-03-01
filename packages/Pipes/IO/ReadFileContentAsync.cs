@@ -7,22 +7,16 @@ public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
     public override SingleFileOptions? ConvertInput(object? input)
     {
         if (input == null) return null;
+        
+        if (InputConverter.TryConvertInput(input, out SingleFileOptions? convertedInput)) return convertedInput;
 
-        if (input is SingleFileOptions singleFileOptions) return singleFileOptions;
-
-        if (input is string path)
+        if (InputConverter.TryConvertInput(input, out string? path))
             return new SingleFileOptions
             {
-                File = new FileInfo(path)
+                File = new FileInfo(path!)
             };
 
-        if (input is IEnumerable<string> paths)
-            return new SingleFileOptions
-            {
-                File = new FileInfo(paths.Single())
-            };
-
-        if (input is FileInfo file)
+        if (InputConverter.TryConvertInput(input, out FileInfo? file))
             return new SingleFileOptions
             {
                 File = file

@@ -33,19 +33,6 @@ public class ReadFileContentAsyncTests
     }
 
     [Fact]
-    public void Test_ConvertInput_StringEnumerable()
-    {
-        var input = new[] { Path.GetTempFileName() };
-
-        var pipeable = new ReadFileContentAsync();
-
-        var result = pipeable.ConvertInput(input);
-        Assert.NotNull(result);
-        Assert.NotNull(result!.File);
-        Assert.Equal(input[0], result.File!.FullName);
-    }
-
-    [Fact]
     public void Test_ConvertInput_FileInfo()
     {
         var input = new FileInfo(Path.GetTempFileName());
