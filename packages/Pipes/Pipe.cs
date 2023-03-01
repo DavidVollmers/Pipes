@@ -20,11 +20,12 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 {
     private readonly IList<Pipeable<object, object>> _pipeables = new List<Pipeable<object, object>>();
 
-    public new TOutput? Output => (TOutput?)base.Output;
+    public new TOutput? Output { get; private set; }
 
     public void Reset()
     {
         Pipe = null;
+        Output = default;
     }
 
     public TOutput? Execute(TInput? input)
@@ -53,9 +54,17 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     private TOutput? VerifyOutput()
     {
-        if (Pipe == null) throw new InvalidOperationException(PipeImplementation.PipeNotExecutedProperlyException);
+        if (Pipe?.Used == null)
+            throw new InvalidOperationException(PipeImplementation.PipeNotExecutedProperlyException);
 
-        return Output;
+        if (Pipe.Output == null) return Output = default;
+
+        //TODO support output conversion
+        if (Pipe.Output is not TOutput output)
+            throw new InvalidOperationException(
+                $"Output of type \"{Pipe.Output.GetType().FullName}\" is not supported. Expected output type \"{typeof(TOutput).FullName}\".");
+
+        return Output = output;
     }
 
     private IPipe<object, object>? Build(CancellationToken cancellationToken)
