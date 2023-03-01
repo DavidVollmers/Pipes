@@ -21,8 +21,9 @@ public sealed class EnumerateFiles : Pipeable<EnumerateFilesOptions, IEnumerable
 
     public override void Execute(IPipe<EnumerateFilesOptions, IEnumerable<string>> pipe)
     {
-        if (pipe.Input == null) throw new PipeInputNullException(nameof(EnumerateFilesOptions));
-        if (pipe.Input.SearchPattern == null)
+        if (pipe.Input?.WorkingDirectory == null)
+            throw new PipeInputNullException(nameof(EnumerateFilesOptions.WorkingDirectory));
+        if (pipe.Input?.SearchPattern == null)
             throw new PipeInputNullException(nameof(EnumerateFilesOptions.SearchPattern));
 
         var paths =

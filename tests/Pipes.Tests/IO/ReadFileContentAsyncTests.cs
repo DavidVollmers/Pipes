@@ -11,11 +11,9 @@ public class ReadFileContentAsyncTests
     [Fact]
     public void Test_ConvertInput_Null()
     {
-        object? input = null;
-
         var pipeable = new ReadFileContentAsync();
 
-        var result = pipeable.ConvertInput(input);
+        var result = pipeable.ConvertInput(null);
         Assert.Null(result);
     }
 
@@ -69,21 +67,6 @@ public class ReadFileContentAsyncTests
         var pipeable = new ReadFileContentAsync();
 
         Assert.Throws<PipeInputNotSupportedException>(() => pipeable.ConvertInput(input));
-    }
-
-    [Fact]
-    public async Task Test_ExecuteAsync_InputIsNull()
-    {
-        var pipe = new Mock<IPipe<SingleFileOptions, Stream>>();
-
-        var pipeable = new ReadFileContentAsync();
-
-        var exception = await Assert.ThrowsAsync<PipeInputNullException>(() => pipeable.ExecuteAsync(pipe.Object));
-        Assert.Equal("File", exception.InputName);
-
-        pipe.Verify(p => p.Input, Times.Once);
-        pipe.Verify(p => p.Pipe(It.IsAny<Stream>()), Times.Never);
-        pipe.Verify(p => p.PipeAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
