@@ -8,6 +8,8 @@ public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
     {
         if (input == null) return null;
 
+        if (input is SingleFileOptions singleFileOptions) return singleFileOptions;
+
         if (input is string path)
             return new SingleFileOptions
             {
@@ -24,12 +26,6 @@ public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
             return new SingleFileOptions
             {
                 File = file
-            };
-
-        if (input is FileBasedOptions fileBasedInput)
-            return new SingleFileOptions
-            {
-                WorkingDirectory = fileBasedInput.WorkingDirectory
             };
 
         throw new PipeInputNotSupportedException(input.GetType(), typeof(SingleFileOptions));

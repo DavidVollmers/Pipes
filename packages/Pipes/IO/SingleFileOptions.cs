@@ -1,6 +1,6 @@
 ﻿namespace Pipes.IO;
 
-public class SingleFileOptions : FileBasedOptions
+public class SingleFileOptions : FileSystemBasedOptions
 {
     public FileInfo? File { get; set; }
 }

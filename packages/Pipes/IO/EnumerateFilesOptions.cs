@@ -1,6 +1,6 @@
 ﻿namespace Pipes.IO;
 
-public sealed class EnumerateFilesOptions : FileBasedOptions
+public sealed class EnumerateFilesOptions : FileSystemBasedOptions
 {
     public SearchOption SearchOption { get; set; }
 

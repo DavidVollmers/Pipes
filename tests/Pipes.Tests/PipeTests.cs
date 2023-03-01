@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Pipes.Abstractions;
 using Pipes.Tests.Pipeables;
 
 namespace Pipes.Tests;

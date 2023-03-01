@@ -10,7 +10,7 @@ public sealed class EnumerateFiles : Pipeable<EnumerateFilesOptions, IEnumerable
 
         if (input is EnumerateFilesOptions enumerateFilesInput) return enumerateFilesInput;
 
-        if (input is FileBasedOptions fileBasedInput)
+        if (input is FileSystemBasedOptions fileBasedInput)
             return new EnumerateFilesOptions
             {
                 WorkingDirectory = fileBasedInput.WorkingDirectory
