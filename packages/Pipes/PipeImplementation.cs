@@ -2,66 +2,68 @@
 
 namespace Pipes;
 
-internal sealed class PipeImplementation : IPipe<object, object>
+internal sealed class PipeImplementation : PipeBase
 {
-    public const string PipeAlreadyUsedException =
-        "Pipe already used. Make sure to only make one call to either .Pipe() or .PipeAsync() when implementing custom pipeables.";
-
-    public const string PipeNotExecutedProperlyException =
+    internal const string PipeNotExecutedProperlyException =
         "Pipe was not executed properly. Make sure to either call .Pipe() or .PipeAsync() when implementing custom pipeables.";
 
     private readonly PipeOutput _output;
     private readonly Pipeable<object, object>[] _pipeables;
     private readonly int _nextPipeLocation;
+    private readonly CancellationToken _cancellationToken;
 
-    public bool Used { get; set; }
-
-    public object Input { get; }
+    public override object? Input { get; }
 
     public PipeImplementation(PipeOutput output, IEnumerable<Pipeable<object, object>> pipeables,
-        int pipeLocation, object? input)
+        int pipeLocation, object? input, CancellationToken cancellationToken)
     {
         _output = output;
         _pipeables = pipeables.ToArray();
         _nextPipeLocation = pipeLocation;
+        _cancellationToken = cancellationToken;
 
-        Input = input!;
+        Input = input;
     }
 
-    public void Pipe(object? input)
+    public override void Pipe(object? input)
     {
-        if (Used) throw new InvalidOperationException(PipeAlreadyUsedException);
-        Used = true;
+        Invalidate();
 
-        var next = GetNextPipe(input);
+        var next = GetNextPipe(input, _cancellationToken);
 
-        _pipeables[_nextPipeLocation].Execute(next!);
+        var pipeable = _pipeables[_nextPipeLocation];
+
+        pipeable.Execute(next!);
+
+        if (!next.Used) pipeable.ExecuteAsync(next!, _cancellationToken).GetAwaiter().GetResult();
 
         if (!next.Used) throw new InvalidOperationException(PipeNotExecutedProperlyException);
     }
 
-    public async Task PipeAsync(object? input, CancellationToken cancellationToken = default)
+    public override async Task PipeAsync(object? input, CancellationToken cancellationToken = default)
     {
-        if (Used) throw new InvalidOperationException(PipeAlreadyUsedException);
-        Used = true;
+        Invalidate();
 
-        var next = GetNextPipe(input);
+        var next = GetNextPipe(input, cancellationToken);
 
-        await _pipeables[_nextPipeLocation].ExecuteAsync(next!, cancellationToken).ConfigureAwait(false);
+        var pipeable = _pipeables[_nextPipeLocation];
+        
+        await pipeable.ExecuteAsync(next!, cancellationToken).ConfigureAwait(false);
 
+        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+        if (!next.Used) pipeable.Execute(next!);
+        
         if (!next.Used) throw new InvalidOperationException(PipeNotExecutedProperlyException);
     }
 
-    private IPipe<object, object> GetNextPipe(object? input)
+    private PipeBase GetNextPipe(object? input, CancellationToken cancellationToken)
     {
         if (_nextPipeLocation >= _pipeables.Length) throw new InvalidOperationException("Nothing to pipe through.");
 
         var convertedInput = _pipeables[_nextPipeLocation].ConvertInput(input);
 
-        _pipeables[_nextPipeLocation].Reset();
-
         if (_nextPipeLocation == _pipeables.Length - 1) return new OutputPipe(_output, convertedInput);
 
-        return new PipeImplementation(_output, _pipeables, _nextPipeLocation + 1, convertedInput);
+        return new PipeImplementation(_output, _pipeables, _nextPipeLocation + 1, convertedInput, cancellationToken);
     }
 }

@@ -35,17 +35,18 @@ public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
         throw new PipeInputNotSupportedException(input.GetType(), typeof(SingleFileOptions));
     }
 
-    public override async Task ExecuteAsync(IPipe<SingleFileOptions, Stream> pipe)
+    public override async Task ExecuteAsync(IPipe<SingleFileOptions, Stream> pipe,
+        CancellationToken cancellationToken = default)
     {
         if (pipe.Input?.File == null) throw new PipeInputNullException(nameof(SingleFileOptions.File));
 
         var fileStream = File.OpenRead(pipe.Input.File.FullName);
 
         var stream = new MemoryStream();
-        await fileStream.CopyToAsync(stream).ConfigureAwait(false);
+        await fileStream.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
 
         stream.Position = 0;
 
-        await pipe.PipeAsync(stream).ConfigureAwait(false);
+        await pipe.PipeAsync(stream, cancellationToken).ConfigureAwait(false);
     }
 }

@@ -2,5 +2,7 @@
 
 public abstract class PipeOutput
 {
-    public object? Output { get; internal set; }
+    internal OutputPipe? Pipe { get; set; }
+
+    public object? Output => Pipe?.Output;
 }

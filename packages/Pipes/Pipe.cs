@@ -10,9 +10,9 @@ public class Pipe : Pipe<object, object>
         Execute(null);
     }
 
-    public Task ExecuteAsync()
+    public Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(null);
+        return ExecuteAsync(null, cancellationToken);
     }
 }
 
@@ -24,35 +24,43 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
 
     public void Reset()
     {
-        base.Output = null;
+        Pipe = null;
     }
-    
+
     public TOutput? Execute(TInput? input)
     {
         if (Output != null) return Output;
 
-        var pipe = Build();
+        var pipe = Build(default);
+        if (pipe == null) return default;
 
-        pipe?.Pipe(input);
+        pipe.Pipe(input);
 
-        return Output;
+        return VerifyOutput();
     }
 
     public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
         if (Output != null) return Output;
 
-        var pipe = Build();
+        var pipe = Build(cancellationToken);
         if (pipe == null) return default;
 
         await pipe.PipeAsync(input, cancellationToken).ConfigureAwait(false);
 
+        return VerifyOutput();
+    }
+
+    private TOutput? VerifyOutput()
+    {
+        if (Pipe == null) throw new InvalidOperationException(PipeImplementation.PipeNotExecutedProperlyException);
+
         return Output;
     }
 
-    private IPipe<object, object>? Build()
+    private IPipe<object, object>? Build(CancellationToken cancellationToken)
     {
-        return _pipeables.Count == 0 ? null : new PipeImplementation(this, _pipeables, 0, null);
+        return _pipeables.Count == 0 ? null : new PipeImplementation(this, _pipeables, 0, null, cancellationToken);
     }
 
     public Pipe<TInput, TOutput> Add(Pipeable<object, object> pipeable)

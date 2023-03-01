@@ -1,14 +1,12 @@
-﻿using Pipes.Abstractions;
+﻿namespace Pipes;
 
-namespace Pipes;
-
-internal class OutputPipe : IPipe<object, object>
+internal class OutputPipe : PipeBase
 {
     private readonly PipeOutput _output;
 
-    public bool Used { get; set; }
+    public override object? Input { get; }
     
-    public object? Input { get; }
+    public object? Output { get; private set; }
 
     public OutputPipe(PipeOutput output, object? input)
     {
@@ -17,20 +15,22 @@ internal class OutputPipe : IPipe<object, object>
         Input = input;
     }
     
-    public void Pipe(object? input)
+    public override void Pipe(object? input)
     {
-        if (Used) throw new InvalidOperationException(PipeImplementation.PipeAlreadyUsedException);
-        Used = true;
+        Invalidate();
         
-        _output.Output = input;
+        _output.Pipe = this;
+
+        Output = input;
     }
 
-    public Task PipeAsync(object? input, CancellationToken cancellationToken = default)
+    public override Task PipeAsync(object? input, CancellationToken cancellationToken = default)
     {
-        if (Used) throw new InvalidOperationException(PipeImplementation.PipeAlreadyUsedException);
-        Used = true;
+        Invalidate();
         
-        _output.Output = input;
+        _output.Pipe = this;
+
+        Output = input;
         
         return Task.CompletedTask;
     }
