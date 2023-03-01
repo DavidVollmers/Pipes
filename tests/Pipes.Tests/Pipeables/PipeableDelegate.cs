@@ -15,7 +15,7 @@ public class PipeableDelegate : PipeableDelegate<object, object>
     }
 }
 
-public class PipeableDelegate<TInput, TOutput> : Pipeable<TInput, TOutput>
+public class PipeableDelegate<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
     public delegate TInput? ConvertInputDelegate(object? input);
 
@@ -39,10 +39,10 @@ public class PipeableDelegate<TInput, TOutput> : Pipeable<TInput, TOutput>
         _executeAsyncDelegate = executeAsyncDelegate;
     }
 
-    public override TInput? ConvertInput(object? input) => _convertInputDelegate(input);
+    public TInput? ConvertInput(object? input) => _convertInputDelegate(input);
 
-    public override void Execute(IPipe<TInput, TOutput?> pipe) => _executeDelegate?.Invoke(pipe);
+    public void Execute(IPipe<TInput, TOutput?> pipe) => _executeDelegate?.Invoke(pipe);
 
-    public override Task ExecuteAsync(IPipe<TInput, TOutput?> pipe, CancellationToken cancellationToken = default)
+    public Task ExecuteAsync(IPipe<TInput, TOutput?> pipe, CancellationToken cancellationToken = default)
         => _executeAsyncDelegate?.Invoke(pipe) ?? Task.CompletedTask;
 }

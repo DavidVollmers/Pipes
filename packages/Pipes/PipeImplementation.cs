@@ -8,13 +8,13 @@ internal sealed class PipeImplementation : PipeBase
         "Pipe was not executed properly. Make sure to either call .Pipe() or .PipeAsync() when implementing custom pipeables.";
 
     private readonly PipeOutput _output;
-    private readonly Pipeable<object, object>[] _pipeables;
+    private readonly IPipeable<object, object>[] _pipeables;
     private readonly int _nextPipeLocation;
     private readonly CancellationToken _cancellationToken;
 
     public override object? Input { get; }
 
-    public PipeImplementation(PipeOutput output, IEnumerable<Pipeable<object, object>> pipeables,
+    public PipeImplementation(PipeOutput output, IEnumerable<IPipeable<object, object>> pipeables,
         int pipeLocation, object? input, CancellationToken cancellationToken)
     {
         _output = output;
@@ -47,12 +47,12 @@ internal sealed class PipeImplementation : PipeBase
         var next = GetNextPipe(input, cancellationToken);
 
         var pipeable = _pipeables[_nextPipeLocation];
-        
+
         await pipeable.ExecuteAsync(next!, cancellationToken).ConfigureAwait(false);
 
         // ReSharper disable once MethodHasAsyncOverloadWithCancellation
         if (!next.Used) pipeable.Execute(next!);
-        
+
         if (!next.Used) throw new InvalidOperationException(PipeNotExecutedProperlyException);
     }
 

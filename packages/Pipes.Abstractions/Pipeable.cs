@@ -1,14 +1,23 @@
 ﻿namespace Pipes.Abstractions;
 
-public abstract class Pipeable : Pipeable<object, object>
+public abstract class Pipeable : IPipeable<object, object>
 {
+    public abstract object? ConvertInput(object? input);
+
+    public virtual void Execute(IPipe<object, object?> pipe)
+    {
+    }
+
+    public virtual Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
 }
 
-//TODO introduce IPipeable interface
-public abstract class Pipeable<TInput, TOutput>
+public abstract class Pipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
     public abstract TInput? ConvertInput(object? input);
-    
+
     public virtual void Execute(IPipe<TInput, TOutput?> pipe)
     {
     }

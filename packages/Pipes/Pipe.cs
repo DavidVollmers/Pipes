@@ -16,9 +16,9 @@ public class Pipe : Pipe<object, object>
     }
 }
 
-public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, object>>
+public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, object>>
 {
-    private readonly IList<Pipeable<object, object>> _pipeables = new List<Pipeable<object, object>>();
+    private readonly IList<IPipeable<object, object>> _pipeables = new List<IPipeable<object, object>>();
 
     public new TOutput? Output { get; private set; }
 
@@ -31,7 +31,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
     public TOutput? Execute(TInput? input)
     {
         Reset();
-        
+
         var pipe = Build(default);
         if (pipe == null) return default;
 
@@ -43,7 +43,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
     public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
         Reset();
-        
+
         var pipe = Build(cancellationToken);
         if (pipe == null) return default;
 
@@ -69,14 +69,14 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<Pipeable<object, ob
         return _pipeables.Count == 0 ? null : new PipeImplementation(this, _pipeables, 0, null, cancellationToken);
     }
 
-    public Pipe<TInput, TOutput> Add(Pipeable<object, object> pipeable)
+    public Pipe<TInput, TOutput> Add(IPipeable<object, object> pipeable)
     {
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
         _pipeables.Add(pipeable);
         return this;
     }
 
-    public IEnumerator<Pipeable<object, object>> GetEnumerator()
+    public IEnumerator<IPipeable<object, object>> GetEnumerator()
     {
         return _pipeables.GetEnumerator();
     }
