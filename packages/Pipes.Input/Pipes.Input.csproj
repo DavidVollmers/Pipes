@@ -4,7 +4,7 @@
         <PackageId>DavidVollmers.Pipes.Input</PackageId>
         <Authors>github@david.vollmers.org</Authors>
         <Copyright>David Vollmers</Copyright>
-        <Description>Pipe input utilities for DavidVollmers.Pipes.</Description>
+        <Description>Provides pipe input utilities for DavidVollmers.Pipes.</Description>
         <PackageProjectUrl>https://github.com/DavidVollmers/Pipes</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>

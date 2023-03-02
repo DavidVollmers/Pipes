@@ -4,7 +4,7 @@
         <PackageId>DavidVollmers.Pipes.Abstractions</PackageId>
         <Authors>github@david.vollmers.org</Authors>
         <Copyright>David Vollmers</Copyright>
-        <Description>Abstractions for DavidVollmers.Pipes.</Description>
+        <Description>Provides abstractions for DavidVollmers.Pipes.</Description>
         <PackageProjectUrl>https://github.com/DavidVollmers/Pipes</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>

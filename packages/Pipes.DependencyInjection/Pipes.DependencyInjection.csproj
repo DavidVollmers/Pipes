@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageId>DavidVollmers.Pipes</PackageId>
+        <PackageId>DavidVollmers.Pipes.DependencyInjection</PackageId>
         <Authors>github@david.vollmers.org</Authors>
         <Copyright>David Vollmers</Copyright>
-        <Description>Simplify complex processes by building pipes from small code units.</Description>
+        <Description>Provides classes that support the implementation of the dependency injection software design pattern for DavidVollmers.Pipes.</Description>
         <PackageProjectUrl>https://github.com/DavidVollmers/Pipes</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,12 +16,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Pipes.Input\Pipes.Input.csproj" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" />
+        <ProjectReference Include="..\Pipes\Pipes.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
     </ItemGroup>
 
 </Project>
