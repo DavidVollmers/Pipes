@@ -2,7 +2,10 @@
 
 public abstract class Pipeable : IPipeable<object, object>
 {
-    public abstract object? ConvertInput(object? input);
+    public object ConvertInput(object? input)
+    {
+        return input ?? throw new PipeInputNullException(nameof(input));
+    }
 
     public virtual void Execute(IPipe<object, object?> pipe)
     {
@@ -16,7 +19,7 @@ public abstract class Pipeable : IPipeable<object, object>
 
 public abstract class Pipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
-    public abstract TInput? ConvertInput(object? input);
+    public abstract TInput ConvertInput(object? input);
 
     public virtual void Execute(IPipe<TInput, TOutput?> pipe)
     {

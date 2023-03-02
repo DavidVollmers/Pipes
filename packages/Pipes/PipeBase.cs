@@ -1,6 +1,4 @@
-﻿using Pipes.Abstractions;
-
-namespace Pipes;
+﻿namespace Pipes;
 
 internal abstract class PipeBase : IPipe<object, object>
 {

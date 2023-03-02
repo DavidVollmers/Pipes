@@ -1,6 +1,4 @@
-﻿using Pipes.Abstractions;
-
-namespace Pipes.Tests.Pipeables;
+﻿namespace Pipes.Tests.Pipeables;
 
 public class PipeableDelegate : PipeableDelegate<object, object>
 {
@@ -17,7 +15,7 @@ public class PipeableDelegate : PipeableDelegate<object, object>
 
 public class PipeableDelegate<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
-    public delegate TInput? ConvertInputDelegate(object? input);
+    public delegate TInput ConvertInputDelegate(object? input);
 
     public delegate void ExecuteDelegate(IPipe<TInput, TOutput?> pipe);
 
@@ -39,7 +37,7 @@ public class PipeableDelegate<TInput, TOutput> : IPipeable<TInput, TOutput>
         _executeAsyncDelegate = executeAsyncDelegate;
     }
 
-    public TInput? ConvertInput(object? input) => _convertInputDelegate(input);
+    public TInput ConvertInput(object? input) => _convertInputDelegate(input);
 
     public void Execute(IPipe<TInput, TOutput?> pipe) => _executeDelegate?.Invoke(pipe);
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Pipes.Abstractions;
 
 namespace Pipes;
 
@@ -7,12 +6,12 @@ public class Pipe : Pipe<object, object>
 {
     public void Execute()
     {
-        Execute(null);
+        Execute(PipeInput.Empty);
     }
 
     public Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(null, cancellationToken);
+        return ExecuteAsync(PipeInput.Empty, cancellationToken);
     }
 }
 

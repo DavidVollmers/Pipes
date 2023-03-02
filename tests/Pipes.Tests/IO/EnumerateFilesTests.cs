@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Pipes.Abstractions;
 using Pipes.IO;
 
 namespace Pipes.Tests.IO;

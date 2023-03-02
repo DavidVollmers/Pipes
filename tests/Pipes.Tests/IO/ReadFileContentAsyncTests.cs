@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
 using Moq;
-using Pipes.Abstractions;
 using Pipes.IO;
 
 namespace Pipes.Tests.IO;

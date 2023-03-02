@@ -1,6 +1,4 @@
-﻿using Pipes.Abstractions;
-
-namespace Pipes;
+﻿namespace Pipes;
 
 public static class PipeExtensions
 {

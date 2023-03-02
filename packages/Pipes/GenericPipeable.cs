@@ -1,6 +1,4 @@
-﻿using Pipes.Abstractions;
-
-namespace Pipes;
+﻿namespace Pipes;
 
 internal class GenericPipeable<TInput, TOutput> : IPipeable<object, object>
 {
