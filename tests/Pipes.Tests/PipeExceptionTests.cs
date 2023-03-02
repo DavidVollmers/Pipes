@@ -37,7 +37,7 @@ public class PipeExceptionTests
     {
         var pipe = new Pipe
         {
-            new PipeableDelegate(i => i, p =>
+            new DelegatePipeable(i => i, p =>
             {
                 p.Pipe(null);
                 p.Pipe(null);
@@ -55,7 +55,7 @@ public class PipeExceptionTests
     {
         var pipe = new Pipe
         {
-            new PipeableDelegate(i => i, async p =>
+            new DelegatePipeable(i => i, async p =>
             {
                 await p.PipeAsync(null);
                 await p.PipeAsync(null);
@@ -74,7 +74,7 @@ public class PipeExceptionTests
         var output = "Not an Integer";
         var pipe = new Pipe<object, int>
         {
-            new PipeableDelegate(i => i, p => p.Pipe(output))
+            new DelegatePipeable(i => i, p => p.Pipe(output))
         };
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => pipe.ExecuteAsync(0));

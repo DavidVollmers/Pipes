@@ -1,19 +1,19 @@
 ﻿namespace Pipes.Tests.Pipeables;
 
-public class PipeableDelegate : PipeableDelegate<object, object>
+public class DelegatePipeable : DelegatePipeable<object, object>
 {
-    public PipeableDelegate(ConvertInputDelegate convertInputDelegate, ExecuteDelegate executeDelegate)
+    public DelegatePipeable(ConvertInputDelegate convertInputDelegate, ExecuteDelegate executeDelegate)
         : base(convertInputDelegate, executeDelegate)
     {
     }
 
-    public PipeableDelegate(ConvertInputDelegate convertInputDelegate, ExecuteAsyncDelegate executeAsyncDelegate)
+    public DelegatePipeable(ConvertInputDelegate convertInputDelegate, ExecuteAsyncDelegate executeAsyncDelegate)
         : base(convertInputDelegate, executeAsyncDelegate)
     {
     }
 }
 
-public class PipeableDelegate<TInput, TOutput> : IPipeable<TInput, TOutput>
+public class DelegatePipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
     public delegate TInput? ConvertInputDelegate(object? input);
 
@@ -25,13 +25,13 @@ public class PipeableDelegate<TInput, TOutput> : IPipeable<TInput, TOutput>
     private readonly ExecuteAsyncDelegate? _executeAsyncDelegate;
     private readonly ExecuteDelegate? _executeDelegate;
 
-    public PipeableDelegate(ConvertInputDelegate convertInputDelegate, ExecuteDelegate executeDelegate)
+    public DelegatePipeable(ConvertInputDelegate convertInputDelegate, ExecuteDelegate executeDelegate)
     {
         _convertInputDelegate = convertInputDelegate;
         _executeDelegate = executeDelegate;
     }
 
-    public PipeableDelegate(ConvertInputDelegate convertInputDelegate, ExecuteAsyncDelegate executeAsyncDelegate)
+    public DelegatePipeable(ConvertInputDelegate convertInputDelegate, ExecuteAsyncDelegate executeAsyncDelegate)
     {
         _convertInputDelegate = convertInputDelegate;
         _executeAsyncDelegate = executeAsyncDelegate;

@@ -1,5 +1,4 @@
 ﻿using Pipes.IO;
-using Pipes.Tests.Pipeables;
 
 namespace Pipes.Tests;
 
@@ -16,8 +15,7 @@ public class PipeIntegrationTests
         var pipe = new Pipe<EnumerateFilesOptions, Stream>
         {
             new EnumerateFiles(),
-            new PipeableDelegate<IEnumerable<string>, string>(i => (IEnumerable<string>)i!,
-                p => p.Pipe(p.Input!.Single())),
+            (IEnumerable<string> paths) => paths.Single(),
             new ReadFileContentAsync()
         };
 

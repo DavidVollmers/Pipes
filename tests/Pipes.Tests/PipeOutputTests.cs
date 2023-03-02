@@ -10,7 +10,7 @@ public class PipeOutputTests
         var input = true;
         var pipe = new Pipe<bool, bool>
         {
-            new PipeableDelegate<bool, bool>(i => (bool)i!, p => p.Pipe(!p.Input))
+            new DelegatePipeable<bool, bool>(i => (bool)i!, p => p.Pipe(!p.Input))
         };
 
         var result = await pipe.ExecuteAsync(input);

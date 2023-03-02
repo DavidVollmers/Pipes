@@ -41,7 +41,7 @@ public class PipeTests
         var i = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
         var result = await pipe.ExecuteAsync(i);
@@ -55,7 +55,7 @@ public class PipeTests
         var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
         var result = pipe.Execute(integer);
@@ -68,7 +68,7 @@ public class PipeTests
     {
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate(i => i, p => p.Pipe(null))
+            new DelegatePipeable(i => i, p => p.Pipe(null))
         };
 
         var result = pipe.Execute(1337);
@@ -82,7 +82,7 @@ public class PipeTests
         var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
         var result = await pipe.ExecuteAsync(integer);
