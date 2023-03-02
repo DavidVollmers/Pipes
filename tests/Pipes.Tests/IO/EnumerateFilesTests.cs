@@ -10,8 +10,8 @@ public class EnumerateFilesTests
     {
         var pipeable = new EnumerateFiles();
 
-        var result = pipeable.ConvertInput(null);
-        Assert.Null(result);
+        var exception = Assert.Throws<PipeInputNullException>(() => pipeable.ConvertInput(null));
+        Assert.Equal("input", exception.InputName);
     }
 
     [Fact]

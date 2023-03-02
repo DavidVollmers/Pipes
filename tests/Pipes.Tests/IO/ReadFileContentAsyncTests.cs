@@ -12,8 +12,8 @@ public class ReadFileContentAsyncTests
     {
         var pipeable = new ReadFileContentAsync();
 
-        var result = pipeable.ConvertInput(null);
-        Assert.Null(result);
+        var exception = Assert.Throws<PipeInputNullException>(() => pipeable.ConvertInput(null));
+        Assert.Equal("input", exception.InputName);
     }
 
     [Fact]

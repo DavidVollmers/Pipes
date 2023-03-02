@@ -8,7 +8,7 @@ public class TypeMap<T> : IEnumerable<TypeMapping<object, T>>
 
     public TypeMap<T> Add(TypeMapping<object, T> mapping)
     {
-        _map.Add(mapping!);
+        _map.Add(mapping);
         return this;
     }
 
