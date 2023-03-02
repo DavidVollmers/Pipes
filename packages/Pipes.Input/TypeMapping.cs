@@ -1,4 +1,4 @@
-﻿namespace Pipes;
+﻿namespace Pipes.Input;
 
 public readonly struct TypeMapping<T1, T2>
 {

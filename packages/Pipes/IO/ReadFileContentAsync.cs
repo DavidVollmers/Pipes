@@ -1,4 +1,6 @@
-﻿namespace Pipes.IO;
+﻿using Pipes.Input;
+
+namespace Pipes.IO;
 
 public class ReadFileContentAsync : Pipeable<SingleFileOptions, Stream>
 {

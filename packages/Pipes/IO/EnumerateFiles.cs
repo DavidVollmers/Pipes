@@ -1,4 +1,6 @@
-﻿namespace Pipes.IO;
+﻿using Pipes.Input;
+
+namespace Pipes.IO;
 
 public sealed class EnumerateFiles : Pipeable<EnumerateFilesOptions, IEnumerable<string>>
 {

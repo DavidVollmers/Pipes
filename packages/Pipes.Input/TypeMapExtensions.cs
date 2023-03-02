@@ -1,4 +1,4 @@
-﻿namespace Pipes;
+﻿namespace Pipes.Input;
 
 public static class TypeMapExtensions
 {

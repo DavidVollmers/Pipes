@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Pipes;
+namespace Pipes.Input;
 
 public class TypeMap<T> : IEnumerable<TypeMapping<object, T>>
 {

@@ -1,4 +1,4 @@
-﻿namespace Pipes;
+﻿namespace Pipes.Input;
 
 public sealed class PipeInput
 {

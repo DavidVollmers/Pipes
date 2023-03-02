@@ -1,4 +1,4 @@
-﻿namespace Pipes.Tests;
+﻿namespace Pipes.Input.Tests;
 
 public class InputConverterTests
 {

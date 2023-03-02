@@ -1,4 +1,6 @@
-﻿namespace Pipes;
+﻿using Pipes.Abstractions;
+
+namespace Pipes.Input;
 
 public static class InputConverter
 {
