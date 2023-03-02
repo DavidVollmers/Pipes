@@ -2,7 +2,7 @@
 
 public interface IPipeable<TInput, out TOutput>
 {
-    TInput ConvertInput(object? input);
+    TInput? ConvertInput(object? input);
 
     void Execute(IPipe<TInput, TOutput?> pipe);
 

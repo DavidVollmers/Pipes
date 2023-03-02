@@ -1,4 +1,5 @@
 ﻿using Pipes.IO;
+using Pipes.Tests.Pipeables;
 
 namespace Pipes.Tests;
 
@@ -11,10 +12,12 @@ public class PipeIntegrationTests
         var guid = Guid.NewGuid();
         var path = Path.GetTempPath() + guid + ".txt";
         await File.WriteAllTextAsync(path, expectedContent);
-        
+
         var pipe = new Pipe<EnumerateFilesOptions, Stream>
         {
             new EnumerateFiles(),
+            new PipeableDelegate<IEnumerable<string>, string>(i => (IEnumerable<string>)i!,
+                p => p.Pipe(p.Input!.Single())),
             new ReadFileContentAsync()
         };
 
@@ -28,7 +31,7 @@ public class PipeIntegrationTests
         using var reader = new StreamReader(result!);
         var content = await reader.ReadToEndAsync();
         Assert.Equal(expectedContent, content);
-        
+
         Assert.Equal(pipe.Output, result);
     }
 }

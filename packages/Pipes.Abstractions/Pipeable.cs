@@ -19,7 +19,7 @@ public abstract class Pipeable : IPipeable<object, object>
 
 public abstract class Pipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
-    public abstract TInput ConvertInput(object? input);
+    public abstract TInput? ConvertInput(object? input);
 
     public virtual void Execute(IPipe<TInput, TOutput?> pipe)
     {
