@@ -5,6 +5,14 @@ namespace Pipes.DependencyInjection;
 
 public class ServicePipe : ServicePipe<object, object>
 {
+    public ServicePipe()
+    {
+    }
+
+    public ServicePipe(ServiceInjection serviceInjection) : base(serviceInjection)
+    {
+    }
+    
     public void Execute()
     {
         Execute(PipeInput.Empty);
@@ -43,6 +51,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 
     public ServicePipe<TInput, TOutput> Activate(IServiceProvider serviceProvider)
     {
+        if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
+        
         if (_scope != null)
             throw new InvalidOperationException(
                 "Service pipe already activated. Use .Reset() before activating it again.");

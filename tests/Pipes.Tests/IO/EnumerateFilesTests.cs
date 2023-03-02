@@ -1,5 +1,4 @@
-﻿using Moq;
-using Pipes.IO;
+﻿using Pipes.IO;
 
 namespace Pipes.Tests.IO;
 

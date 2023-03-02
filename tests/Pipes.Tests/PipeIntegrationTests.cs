@@ -32,4 +32,32 @@ public class PipeIntegrationTests
 
         Assert.Equal(pipe.Output, result);
     }
+
+    [Fact]
+    public void Test_ExecuteSyncToAsync()
+    {
+        var input = new Random().Next();
+        var pipe = new Pipe<int, int>
+        {
+            (int i) => i * 2,
+            async (int i) => i + 1,
+        };
+
+        var result = pipe.Execute(input);
+        Assert.Equal(input * 2 + 1, result);
+    }
+
+    [Fact]
+    public async Task Test_ExecuteAsyncToSync()
+    {
+        var input = new Random().Next();
+        var pipe = new Pipe<int, int>
+        {
+            async (int i) => i + 1,
+            (int i) => i * 2,
+        };
+
+        var result = await pipe.ExecuteAsync(input);
+        Assert.Equal((input + 1) * 2, result);
+    }
 }
