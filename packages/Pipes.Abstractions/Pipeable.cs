@@ -2,7 +2,7 @@
 
 public abstract class Pipeable : IPipeable<object, object>
 {
-    public object ConvertInput(object? input)
+    public virtual object ConvertInput(object? input)
     {
         return input ?? throw new PipeInputNullException(nameof(input));
     }

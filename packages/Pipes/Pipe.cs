@@ -22,7 +22,12 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
 
     public new TOutput? Output { get; private set; }
 
-    public void Reset()
+    public virtual void Reset()
+    {
+        ResetOutput();
+    }
+
+    private void ResetOutput()
     {
         Pipe = null;
         Output = default;
@@ -30,7 +35,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
 
     public TOutput? Execute(TInput? input)
     {
-        Reset();
+        ResetOutput();
 
         var pipe = Build(default);
         if (pipe == null) return default;
@@ -42,7 +47,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
 
     public async Task<TOutput?> ExecuteAsync(TInput? input, CancellationToken cancellationToken = default)
     {
-        Reset();
+        ResetOutput();
 
         var pipe = Build(cancellationToken);
         if (pipe == null) return default;
