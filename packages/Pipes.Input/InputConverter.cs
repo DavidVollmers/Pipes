@@ -8,16 +8,11 @@ public static class InputConverter
     {
         convertedInput = default;
 
-        switch (input)
-        {
-            case null:
-                return false;
-            case T i:
-                convertedInput = i;
-                return true;
-        }
+        if (input is not T i) return false;
+        
+        convertedInput = i;
+        return true;
 
-        return false;
     }
 
     public static T ConvertInput<T>(object? input)
@@ -29,6 +24,8 @@ public static class InputConverter
 
     public static T ConvertInputByTypeMap<T>(object? input, TypeMap<T> typeMap)
     {
+        if (typeMap == null) throw new ArgumentNullException(nameof(typeMap));
+        
         if (input == null) throw new PipeInputNullException(nameof(input));
 
         foreach (var mapping in typeMap)
@@ -44,9 +41,7 @@ public static class InputConverter
     {
         convertedInput = type.IsValueType ? Activator.CreateInstance(type) : null;
 
-        if (input == null) return false;
-
-        if (input.GetType() != type) return false;
+        if (input?.GetType() != type) return false;
 
         convertedInput = input;
         return true;

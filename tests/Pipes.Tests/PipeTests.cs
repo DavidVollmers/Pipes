@@ -94,13 +94,12 @@ public class PipeTests
     }
 
     [Fact]
-    public void Test_GetEnumerator()
+    public void Test_AddAndGetEnumerator()
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
-        var pipe = new Pipe
-        {
-            new EmptyPipeable()
-        };
+        var pipe = new Pipe();
+        
+        pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
         Assert.Collection(pipe,
@@ -109,13 +108,12 @@ public class PipeTests
     }
 
     [Fact]
-    public void Test_GetEnumerator_IEnumerableCast()
+    public void Test_AddAndGetEnumerator_IEnumerableCast()
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
-        var pipe = new Pipe
-        {
-            new EmptyPipeable()
-        };
+        var pipe = new Pipe();
+        
+        pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
         foreach (var result in (IEnumerable) pipe)

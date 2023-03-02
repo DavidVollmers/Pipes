@@ -8,6 +8,7 @@ public readonly struct TypeMapping<T1, T2>
 
     public TypeMapping(Func<T1, T2> mapper) : this(typeof(T1), mapper)
     {
+        if (mapper == null) throw new ArgumentNullException(nameof(mapper));
     }
 
     internal TypeMapping(Type type, Func<T1, T2> mapper)
