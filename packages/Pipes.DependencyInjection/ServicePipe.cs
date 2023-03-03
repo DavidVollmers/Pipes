@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.Abstractions;
+using Pipes.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
@@ -59,8 +61,9 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
     public ServicePipe<TInput, TOutput> Add(Type type)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
-        var pipeableType = new PipeableType(type, _serviceInjection);
-        _pipeableTypes.Add(pipeableType);
+        var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
+        if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
+        var pipeableType = new PipeableType(type, pipeableInterface);
         Add(pipeableType);
         return this;
     }
@@ -75,7 +78,20 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 
         _scope = serviceProvider.CreateScope();
 
-        foreach (var pipeableType in _pipeableTypes) pipeableType.Activate(_scope.ServiceProvider);
+        foreach (var pipeable in this)
+        {
+            switch (pipeable)
+            {
+                case PipeableType pipeableType:
+                    pipeableType.Activate(_scope.ServiceProvider, _serviceInjection);
+                    _pipeableTypes.Add(pipeableType);
+                    break;
+                case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType }:
+                    pipeableServiceType.Activate(_scope.ServiceProvider, _serviceInjection);
+                    _pipeableTypes.Add(pipeableServiceType);
+                    break;
+            }
+        }
 
         return this;
     }
@@ -83,6 +99,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
     public override void Reset()
     {
         foreach (var pipeableType in _pipeableTypes) pipeableType.Reset();
+
+        _pipeableTypes.Clear();
 
         if (_scope != null)
         {

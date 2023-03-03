@@ -5,21 +5,19 @@ namespace Pipes.DependencyInjection;
 
 internal class PipeableType : IPipeable<object, object>
 {
-    private readonly ServiceInjection _serviceInjection;
     private readonly Type _inputType;
     private readonly Type _outputType;
 
     private object? _pipeable;
     private IServiceProvider? _serviceProvider;
+    private ServiceInjection _serviceInjection;
 
     public Type Type { get; }
 
-    public PipeableType(Type type, ServiceInjection serviceInjection)
+    public PipeableType(Type type, Type pipeableInterface)
     {
         Type = type;
-        _serviceInjection = serviceInjection;
 
-        var pipeableInterface = Type.GetInterface(typeof(IPipeable<,>).Name)!;
         _inputType = pipeableInterface.GenericTypeArguments[0];
         _outputType = pipeableInterface.GenericTypeArguments[1];
     }
@@ -58,8 +56,9 @@ internal class PipeableType : IPipeable<object, object>
         return Activator.CreateInstance(genericPipeType, pipe)!;
     }
 
-    public void Activate(IServiceProvider serviceProvider)
+    public void Activate(IServiceProvider serviceProvider, ServiceInjection serviceInjection)
     {
+        _serviceInjection = serviceInjection;
         _serviceProvider = serviceProvider;
 
         if (_serviceInjection == ServiceInjection.OnActivation) ActivateType();

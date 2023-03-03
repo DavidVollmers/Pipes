@@ -1,4 +1,5 @@
 ﻿using Pipes.DependencyInjection;
+using Pipes.DependencyInjection.Caching;
 using Pipes.Examples.AspNetCore.Models;
 using Pipes.Examples.AspNetCore.Pipes.Pipeables;
 
@@ -10,7 +11,7 @@ public static class RequestPipes
     {
         public static readonly ServicePipe<Guid, TodoItem?> Get = new()
         {
-            typeof(GetTodoAsync),
+            Cache.Output<GetTodoAsync>(),
             typeof(VerifyTodoPermissions),
             (IEnumerable<TodoItem> items) => items.SingleOrDefault()
         };
