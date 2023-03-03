@@ -9,4 +9,6 @@ public class TodoItem
     public bool IsPublic { get; set; }
     
     public string? CreatedBy { get; set; }
+
+    public bool IsDone { get; set; }
 }

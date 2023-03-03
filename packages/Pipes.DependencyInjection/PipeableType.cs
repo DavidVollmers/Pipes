@@ -6,14 +6,15 @@ namespace Pipes.DependencyInjection;
 internal class PipeableType : IPipeable<object, object>
 {
     private readonly ServiceInjection _serviceInjection;
-    private readonly Type _type;
     private IPipeable<object, object>? _pipeable;
-
+    
     private IServiceProvider? _serviceProvider;
+
+    public Type Type { get; }
 
     public PipeableType(Type type, ServiceInjection serviceInjection)
     {
-        _type = type;
+        Type = type;
         _serviceInjection = serviceInjection;
     }
 
@@ -49,6 +50,6 @@ internal class PipeableType : IPipeable<object, object>
 
     private void ActivateType()
     {
-        _pipeable = (dynamic)_serviceProvider!.GetRequiredService(_type);
+        _pipeable = (dynamic)_serviceProvider!.GetRequiredService(Type);
     }
 }

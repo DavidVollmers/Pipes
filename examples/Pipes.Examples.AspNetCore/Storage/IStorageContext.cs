@@ -4,5 +4,5 @@ namespace Pipes.Examples.AspNetCore.Storage;
 
 public interface IStorageContext
 {
-    Task<TodoItem> GetTodoItemAsync(Guid id);
+    Task<TodoItem?> GetTodoItemAsync(Guid id);
 }
