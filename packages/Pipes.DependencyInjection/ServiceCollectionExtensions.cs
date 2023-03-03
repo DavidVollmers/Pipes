@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
         foreach (var service in servicePipe)
         {
             var serviceType = ((PipeableType)service).Type;
-            var serviceDescriptor = new ServiceDescriptor(serviceType, serviceLifetime);
+            var serviceDescriptor = new ServiceDescriptor(serviceType, serviceType, serviceLifetime);
             serviceCollection.Add(serviceDescriptor);
         }
 
