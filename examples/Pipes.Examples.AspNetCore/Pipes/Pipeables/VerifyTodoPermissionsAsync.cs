@@ -24,7 +24,7 @@ public class VerifyTodoPermissionsAsync : Pipeable<TodoItem?, TodoItem?>
             return;
         }
 
-        //TODO: In most cases you also want to make sure the user is authenticated...
+        //TODO: Usually you also want to make sure the user is authenticated...
         // if (!(_httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false))
         // {
         //     await pipe.PipeAsync(null, cancellationToken);

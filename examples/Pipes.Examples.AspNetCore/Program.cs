@@ -14,6 +14,8 @@ builder.Services.AddScoped(RequestPipes.Todo.Get);
 
 var app = builder.Build();
 
+RequestPipes.Todo.Get.Activate(app.Services);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

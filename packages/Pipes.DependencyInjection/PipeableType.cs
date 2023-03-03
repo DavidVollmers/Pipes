@@ -48,7 +48,7 @@ internal class PipeableType : IPipeable<object, object>
         return (Task)executeAsyncMethod!.Invoke(_pipeable, new[] { genericPipe, cancellationToken })!;
     }
 
-    private object CreateGenericPipeImplementation(IPipe<object, object> pipe)
+    private object CreateGenericPipeImplementation(IPipe<object, object?> pipe)
     {
         var genericPipeType = typeof(GenericPipeImplementation<,>).MakeGenericType(_inputType, _outputType);
         return Activator.CreateInstance(genericPipeType, pipe)!;

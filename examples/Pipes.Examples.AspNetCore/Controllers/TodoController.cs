@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Pipes.Examples.AspNetCore.Models;
 using Pipes.Examples.AspNetCore.Pipes;
 
@@ -8,17 +9,19 @@ namespace Pipes.Examples.AspNetCore.Controllers;
 [Route("api/todo")]
 public class TodoController : ControllerBase
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public TodoController(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<TodoItem>> GetTodoItemAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<TodoItem>> GetTodoItemAsync(Guid id, [FromQuery] string? requestedBy = null,
+        CancellationToken cancellationToken = default)
     {
-        var item = await RequestPipes.Todo.Get.Activate(_serviceProvider).ExecuteAsync(id, cancellationToken);
+        if (requestedBy != null)
+        {
+            //TODO: Usually this is done via authentication...
+            var nameClaim = new Claim(ClaimTypes.Name, requestedBy);
+            var identity = new ClaimsIdentity(new[] { nameClaim });
+            HttpContext.User = new ClaimsPrincipal(new[] { identity });
+        }
+
+        var item = await RequestPipes.Todo.Get.ExecuteAsync(id, cancellationToken);
 
         if (item == null) return NotFound();
 
