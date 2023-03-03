@@ -61,4 +61,12 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
         var cachePipe = new OutputCachePipeImplementation<TInput, TOutput>(this, pipe);
         return Pipeable.ExecuteAsync(cachePipe!, cancellationToken);
     }
+
+    public void Clear()
+    {
+        _outputCache = default;
+        _outputCached = false;
+        _inputCache = default;
+        _inputCached = false;
+    }
 }

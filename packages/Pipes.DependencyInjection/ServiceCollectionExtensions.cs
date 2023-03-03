@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.Caching;
 
 namespace Pipes.DependencyInjection;
 
@@ -10,11 +11,17 @@ public static class ServiceCollectionExtensions
         if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
         if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
 
-        foreach (var service in servicePipe)
+        foreach (var pipeable in servicePipe)
         {
-            if (service is not PipeableType pipeable) continue;
-            var serviceDescriptor = new ServiceDescriptor(pipeable.Type, pipeable.Type, serviceLifetime);
-            serviceCollection.Add(serviceDescriptor);
+            var serviceDescriptor = pipeable switch
+            {
+                PipeableType p => new ServiceDescriptor(p.Type, p.Type, serviceLifetime),
+                PipeableCache<object, object> { Pipeable: PipeableType s } => new ServiceDescriptor(s.Type, s.Type,
+                    serviceLifetime),
+                _ => null
+            };
+
+            if (serviceDescriptor != null) serviceCollection.Add(serviceDescriptor);
         }
 
         return serviceCollection;

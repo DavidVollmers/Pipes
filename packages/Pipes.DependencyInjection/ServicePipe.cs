@@ -42,6 +42,7 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
 public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 {
     private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
+    private readonly IList<PipeableCache<object, object>> _pipeableCaches = new List<PipeableCache<object, object>>();
     private readonly ServiceInjection _serviceInjection;
 
     private IServiceScope? _scope;
@@ -86,9 +87,10 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
                     pipeableType.Activate(_scope.ServiceProvider, _serviceInjection);
                     _pipeableTypes.Add(pipeableType);
                     break;
-                case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType }:
+                case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType } pipeableCache:
                     pipeableServiceType.Activate(_scope.ServiceProvider, _serviceInjection);
                     _pipeableTypes.Add(pipeableServiceType);
+                    _pipeableCaches.Add(pipeableCache);
                     break;
             }
         }
@@ -101,6 +103,10 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
         foreach (var pipeableType in _pipeableTypes) pipeableType.Reset();
 
         _pipeableTypes.Clear();
+
+        foreach (var pipeableCache in _pipeableCaches) pipeableCache.Clear();
+
+        _pipeableCaches.Clear();
 
         if (_scope != null)
         {
