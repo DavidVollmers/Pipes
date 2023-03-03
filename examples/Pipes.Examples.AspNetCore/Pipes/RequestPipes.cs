@@ -11,7 +11,14 @@ public static class RequestPipes
         public static readonly ServicePipe<Guid, TodoItem?> Get = new()
         {
             typeof(GetTodoAsync),
-            typeof(VerifyTodoPermissionsAsync)
+            typeof(VerifyTodoPermissions),
+            (IEnumerable<TodoItem> items) => items.SingleOrDefault()
+        };
+
+        public static readonly ServicePipe<IEnumerable<TodoItem>> GetAll = new()
+        {
+            typeof(GetAllTodoAsync),
+            typeof(VerifyTodoPermissions)
         };
     }
 }

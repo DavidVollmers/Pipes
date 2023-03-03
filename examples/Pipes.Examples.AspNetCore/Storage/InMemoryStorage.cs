@@ -29,4 +29,9 @@ public class InMemoryStorage : IStorageContext
         var item = Items.FirstOrDefault(i => i.Id == id);
         return Task.FromResult(item);
     }
+
+    public Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync()
+    {
+        return Task.FromResult(Items.AsEnumerable());
+    }
 }

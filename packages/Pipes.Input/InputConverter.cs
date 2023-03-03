@@ -21,6 +21,15 @@ public static class InputConverter
         throw new PipeInputNotSupportedException(input.GetType(), typeof(T));
     }
 
+    public static IEnumerable<T> ConvertInputToEnumerable<T>(object? input, bool allowEmpty = true)
+    {
+        if (TryConvertInput(input, out IEnumerable<T>? convertedEnumerable)) return convertedEnumerable!;
+        if (TryConvertInput(input, out T? convertedInput)) return new[] { convertedInput! };
+        if (allowEmpty) return Array.Empty<T>();
+        if (input == null) throw new PipeInputNullException(nameof(input));
+        throw new PipeInputNotSupportedException(input.GetType(), typeof(T));
+    }
+
     public static T ConvertInputByTypeMap<T>(object? input, TypeMap<T> typeMap)
     {
         if (typeMap == null) throw new ArgumentNullException(nameof(typeMap));

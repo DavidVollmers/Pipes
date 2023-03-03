@@ -16,6 +16,19 @@ public class Pipe : Pipe<object, object>
     }
 }
 
+public class Pipe<TOutput> : Pipe<object, TOutput>
+{
+    public TOutput? Execute()
+    {
+        return Execute(PipeInput.Empty);
+    }
+
+    public Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
+    {
+        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+    }
+}
+
 public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, object>>
 {
     private readonly IList<IPipeable<object, object>> _pipeables = new List<IPipeable<object, object>>();

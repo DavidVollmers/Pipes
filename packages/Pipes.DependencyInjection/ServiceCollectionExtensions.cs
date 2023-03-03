@@ -12,8 +12,8 @@ public static class ServiceCollectionExtensions
 
         foreach (var service in servicePipe)
         {
-            var serviceType = ((PipeableType)service).Type;
-            var serviceDescriptor = new ServiceDescriptor(serviceType, serviceType, serviceLifetime);
+            if (service is not PipeableType pipeable) continue;
+            var serviceDescriptor = new ServiceDescriptor(pipeable.Type, pipeable.Type, serviceLifetime);
             serviceCollection.Add(serviceDescriptor);
         }
 

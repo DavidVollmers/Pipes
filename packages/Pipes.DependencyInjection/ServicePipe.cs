@@ -20,6 +20,23 @@ public class ServicePipe : ServicePipe<object, object>
     }
 }
 
+public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
+{
+    public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation) : base(serviceInjection)
+    {
+    }
+
+    public TOutput? Execute()
+    {
+        return Execute(PipeInput.Empty);
+    }
+
+    public Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
+    {
+        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+    }
+}
+
 public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 {
     private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
