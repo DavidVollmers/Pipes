@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.DependencyInjection.Tests.Pipeables;
 
 namespace Pipes.DependencyInjection.Tests;
 
@@ -41,5 +42,18 @@ public class ServicePipeExceptionTests
         Assert.Equal("Service pipe already activated. Use .Reset() before activating it again.", exception.Message);
 
         serviceScopeFactory.Verify(ssf => ssf.CreateScope(), Times.Once);
+    }
+
+    [Fact]
+    public void Test_Execute_PipeWasNotActivated()
+    {
+        var pipe = new ServicePipe
+        {
+            typeof(ServicePipeable)
+        };
+
+        var exception = Assert.Throws<InvalidOperationException>(() => pipe.Execute());
+        Assert.Equal("Pipe was not activated before execution. Please use .Activate() before executing a pipe.",
+            exception.Message);
     }
 }
