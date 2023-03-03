@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipes.DependencyInjection",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipes.DependencyInjection.Tests", "tests\Pipes.DependencyInjection.Tests\Pipes.DependencyInjection.Tests.csproj", "{1DA6DBA4-7B85-425B-9569-5638F630148A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{27D1EADD-F834-455D-B555-A4CE3DE4F235}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipes.Examples.AspNetCore", "examples\Pipes.Examples.AspNetCore\Pipes.Examples.AspNetCore.csproj", "{970E0E8D-10A6-48D9-BA6B-8832734969D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,10 +54,15 @@ Global
 		{1DA6DBA4-7B85-425B-9569-5638F630148A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DA6DBA4-7B85-425B-9569-5638F630148A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DA6DBA4-7B85-425B-9569-5638F630148A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970E0E8D-10A6-48D9-BA6B-8832734969D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970E0E8D-10A6-48D9-BA6B-8832734969D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970E0E8D-10A6-48D9-BA6B-8832734969D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970E0E8D-10A6-48D9-BA6B-8832734969D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{54C3E540-3649-43F5-A124-40D6E384B4CD} = {C3CBCD9E-E120-4796-A8F3-CDA4F8415581}
 		{F5604812-E7EE-469D-BFE3-0C6A76AAFD7E} = {C3CBCD9E-E120-4796-A8F3-CDA4F8415581}
 		{1DA6DBA4-7B85-425B-9569-5638F630148A} = {C3CBCD9E-E120-4796-A8F3-CDA4F8415581}
+		{970E0E8D-10A6-48D9-BA6B-8832734969D2} = {27D1EADD-F834-455D-B555-A4CE3DE4F235}
 	EndGlobalSection
 EndGlobal
