@@ -16,6 +16,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="Pipes.DependencyInjection"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Pipes.Input\Pipes.Input.csproj"/>
     </ItemGroup>
 
