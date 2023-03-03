@@ -20,5 +20,15 @@ public static class RequestPipes
             typeof(GetAllTodoAsync),
             typeof(VerifyTodoPermissions)
         };
+
+        public static readonly ServicePipe<CreateTodoItemRequest, TodoItem> Create = new()
+        {
+            typeof(CreateTodoAsync)
+        };
+
+        public static readonly ServicePipe<UpdateTodoItemRequest, TodoItem> Update = new()
+        {
+            typeof(UpdateTodoItemAsync)
+        };
     }
 }

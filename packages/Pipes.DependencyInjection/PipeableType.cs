@@ -28,6 +28,10 @@ internal class PipeableType : IPipeable<object, object>
     {
         if (_serviceInjection == ServiceInjection.OnInput) ActivateType();
 
+        if (_pipeable == null)
+            throw new InvalidOperationException(
+                "Pipe was not activated before execution. Please use .Activate() before executing a pipe.");
+
         var convertInputMethod = Type.GetMethod(nameof(ConvertInput))!;
         return convertInputMethod.Invoke(_pipeable, new[] { input });
     }

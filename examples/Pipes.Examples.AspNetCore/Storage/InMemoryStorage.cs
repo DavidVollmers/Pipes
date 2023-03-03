@@ -34,4 +34,27 @@ public class InMemoryStorage : IStorageContext
     {
         return Task.FromResult(Items.AsEnumerable());
     }
+
+    public Task<TodoItem> CreateTodoItemAsync(string todo, string createdBy, bool isPublic, bool isDone)
+    {
+        var item = new TodoItem
+        {
+            Id = Guid.NewGuid(),
+            CreatedBy = createdBy,
+            Todo = todo,
+            IsPublic = isPublic,
+            IsDone = isDone
+        };
+        Items.Add(item);
+        return Task.FromResult(item);
+    }
+
+    public Task UpdateTodoItemAsync(TodoItem item)
+    {
+        var existing = Items.Single(i => i.Id == item.Id);
+        existing.Todo = item.Todo;
+        existing.IsPublic = item.IsPublic;
+        existing.IsDone = item.IsDone;
+        return Task.CompletedTask;
+    }
 }

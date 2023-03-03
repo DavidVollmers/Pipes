@@ -19,7 +19,7 @@ public class TodoController : ControllerBase
 
         return Ok(items);
     }
-    
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<TodoItem>> GetTodoItemAsync(Guid id, [FromQuery] string? requestedBy = null,
         CancellationToken cancellationToken = default)
@@ -32,6 +32,37 @@ public class TodoController : ControllerBase
 
         return Ok(item);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<TodoItem>> CreateTodoItemAsync([FromBody] CreateTodoItemRequest request,
+        [FromQuery] string? requestedBy = null, CancellationToken cancellationToken = default)
+    {
+        if (requestedBy == null) return Unauthorized();
+
+        Login(requestedBy);
+        
+        var item = await RequestPipes.Todo.Create.ExecuteAsync(request, cancellationToken);
+
+        return Ok(item);
+    }
+
+    [HttpPost("{id:guid}")]
+    public async Task<ActionResult<TodoItem>> UpdateTodoItemAsync(Guid id, [FromBody] UpdateTodoItemRequest request,
+        [FromQuery] string? requestedBy = null, CancellationToken cancellationToken = default)
+    {
+        if (requestedBy != null) Login(requestedBy);
+
+        if (id != request.Id) return BadRequest();
+        
+        var existing = await RequestPipes.Todo.Get.ExecuteAsync(id, cancellationToken).ConfigureAwait(false);
+
+        if (existing == null) return NotFound();
+
+        var item = await RequestPipes.Todo.Update.ExecuteAsync(request, cancellationToken);
+
+        return Ok(item);
+    }
+
 
     private void Login(string user)
     {
