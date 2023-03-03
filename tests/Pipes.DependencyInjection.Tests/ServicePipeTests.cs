@@ -24,6 +24,28 @@ public class ServicePipeTests
 
         Assert.Null(pipe.Output);
     }
+    
+    [Fact]
+    public void Test_Execute_WithOutput_NoPipeables()
+    {
+        var pipe = new ServicePipe<object?>();
+
+        var output =pipe.Execute();
+        Assert.Null(output);
+        
+        Assert.Null(pipe.Output);
+    }
+
+    [Fact]
+    public async Task Test_ExecuteAsync_WithOutput_NoPipeables()
+    {
+        var pipe = new ServicePipe<object?>();
+
+        var output = await pipe.ExecuteAsync();
+        Assert.Null(output);
+        
+        Assert.Null(pipe.Output);
+    }
 
     [Fact]
     public void Test_Add()
