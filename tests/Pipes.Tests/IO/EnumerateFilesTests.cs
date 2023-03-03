@@ -17,12 +17,12 @@ public class EnumerateFilesTests
     public void Test_ConvertInput_String()
     {
         var input = Guid.NewGuid().ToString();
-        
+
         var pipeable = new EnumerateFiles();
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.Equal(input, result!.SearchPattern);
+        Assert.Equal(input, result.SearchPattern);
     }
 
     [Fact]
@@ -32,12 +32,12 @@ public class EnumerateFilesTests
         {
             SearchPattern = Guid.NewGuid().ToString()
         };
-        
+
         var pipeable = new EnumerateFiles();
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.Equal(input.SearchPattern, result!.SearchPattern);
+        Assert.Equal(input.SearchPattern, result.SearchPattern);
     }
 
     [Fact]

@@ -71,7 +71,7 @@ public class PipeExceptionTests
     [Fact]
     public async Task Test_VerifyOutput_OutputTypeNotSupported()
     {
-        var output = "Not an Integer";
+        const string output = "Not an Integer";
         var pipe = new Pipe<object, int>
         {
             new DelegatePipeable(i => i, p => p.Pipe(output))
@@ -88,7 +88,7 @@ public class PipeExceptionTests
     {
         var pipe = new Pipe();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => pipe.Add(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => pipe.Add(null!));
         Assert.Equal("pipeable", exception.ParamName);
     }
 }

@@ -14,7 +14,7 @@ public class AsyncServicePipeable : Pipeable
         _counter.Increment();
 
         pipe.Pipe(_counter.Value);
-        
+
         return Task.CompletedTask;
     }
 }

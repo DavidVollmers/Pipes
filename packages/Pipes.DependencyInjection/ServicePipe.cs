@@ -5,14 +5,10 @@ namespace Pipes.DependencyInjection;
 
 public class ServicePipe : ServicePipe<object, object>
 {
-    public ServicePipe()
+    public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation) : base(serviceInjection)
     {
     }
 
-    public ServicePipe(ServiceInjection serviceInjection) : base(serviceInjection)
-    {
-    }
-    
     public void Execute()
     {
         Execute(PipeInput.Empty);
@@ -31,13 +27,16 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 
     private IServiceScope? _scope;
 
-    public ServicePipe(ServiceInjection serviceInjection)
+    public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation)
     {
         _serviceInjection = serviceInjection;
     }
 
-    public ServicePipe() : this(ServiceInjection.OnActivation)
+    public void Dispose()
     {
+        _scope?.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 
     public ServicePipe<TInput, TOutput> Add(Type type)
@@ -52,27 +51,21 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
     public ServicePipe<TInput, TOutput> Activate(IServiceProvider serviceProvider)
     {
         if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
-        
+
         if (_scope != null)
             throw new InvalidOperationException(
                 "Service pipe already activated. Use .Reset() before activating it again.");
 
         _scope = serviceProvider.CreateScope();
 
-        foreach (var pipeableType in _pipeableTypes)
-        {
-            pipeableType.Activate(_scope.ServiceProvider);
-        }
+        foreach (var pipeableType in _pipeableTypes) pipeableType.Activate(_scope.ServiceProvider);
 
         return this;
     }
 
     public override void Reset()
     {
-        foreach (var pipeableType in _pipeableTypes)
-        {
-            pipeableType.Reset();
-        }
+        foreach (var pipeableType in _pipeableTypes) pipeableType.Reset();
 
         if (_scope != null)
         {
@@ -81,12 +74,5 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
         }
 
         base.Reset();
-    }
-
-    public void Dispose()
-    {
-        _scope?.Dispose();
-        
-        GC.SuppressFinalize(this);
     }
 }

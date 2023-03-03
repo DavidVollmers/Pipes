@@ -17,9 +17,9 @@ public class DelegatePipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
     public delegate TInput? ConvertInputDelegate(object? input);
 
-    public delegate void ExecuteDelegate(IPipe<TInput, TOutput?> pipe);
-
     public delegate Task ExecuteAsyncDelegate(IPipe<TInput, TOutput?> pipe);
+
+    public delegate void ExecuteDelegate(IPipe<TInput, TOutput?> pipe);
 
     private readonly ConvertInputDelegate _convertInputDelegate;
     private readonly ExecuteAsyncDelegate? _executeAsyncDelegate;
@@ -37,10 +37,18 @@ public class DelegatePipeable<TInput, TOutput> : IPipeable<TInput, TOutput>
         _executeAsyncDelegate = executeAsyncDelegate;
     }
 
-    public TInput? ConvertInput(object? input) => _convertInputDelegate(input);
+    public TInput? ConvertInput(object? input)
+    {
+        return _convertInputDelegate(input);
+    }
 
-    public void Execute(IPipe<TInput, TOutput?> pipe) => _executeDelegate?.Invoke(pipe);
+    public void Execute(IPipe<TInput, TOutput?> pipe)
+    {
+        _executeDelegate?.Invoke(pipe);
+    }
 
     public Task ExecuteAsync(IPipe<TInput, TOutput?> pipe, CancellationToken cancellationToken = default)
-        => _executeAsyncDelegate?.Invoke(pipe) ?? Task.CompletedTask;
+    {
+        return _executeAsyncDelegate?.Invoke(pipe) ?? Task.CompletedTask;
+    }
 }

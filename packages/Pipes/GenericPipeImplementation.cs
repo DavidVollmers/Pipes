@@ -4,12 +4,12 @@ internal class GenericPipeImplementation<TInput, TOutput> : IPipe<TInput, TOutpu
 {
     private readonly IPipe<object, object> _inner;
 
-    public TInput? Input => (TInput?)_inner.Input;
-
     public GenericPipeImplementation(IPipe<object, object> inner)
     {
         _inner = inner;
     }
+
+    public TInput? Input => (TInput?)_inner.Input;
 
     public void Pipe(TOutput? input)
     {

@@ -8,7 +8,7 @@ public class TypeMappingTests
         var exception = Assert.Throws<ArgumentNullException>(() => new TypeMapping<object, object>(null!));
         Assert.Equal("mapper", exception.ParamName);
     }
-    
+
     [Fact]
     public void Test_Constructor()
     {

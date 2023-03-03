@@ -12,7 +12,7 @@ public class ServicePipeable : Pipeable
     public override void Execute(IPipe<object, object?> pipe)
     {
         _counter.Increment();
-        
+
         pipe.Pipe(_counter.Value);
     }
 }

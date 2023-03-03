@@ -80,7 +80,7 @@ public class ServicePipeTests
         {
             typeof(ServicePipeable)
         };
-        
+
         var scopeServiceProvider = new Mock<IServiceProvider>();
         scopeServiceProvider.Setup(sp => sp.GetService(It.Is<Type>(t => t == typeof(ServicePipeable))))
             .Returns(new ServicePipeable(new CounterService()));
@@ -106,7 +106,7 @@ public class ServicePipeTests
         {
             typeof(ServicePipeable)
         };
-        
+
         var scopeServiceProvider = new Mock<IServiceProvider>();
         scopeServiceProvider.Setup(sp => sp.GetService(It.Is<Type>(t => t == typeof(ServicePipeable))))
             .Returns(new ServicePipeable(new CounterService()));
@@ -127,6 +127,5 @@ public class ServicePipeTests
         pipe.Execute();
 
         scopeServiceProvider.Verify(sp => sp.GetService(It.Is<Type>(t => t == typeof(ServicePipeable))), Times.Once);
-        
     }
 }

@@ -8,9 +8,10 @@ public class PipeExtensionsTests
     public void Test_Add_PipeIsNull()
     {
         IPipeable<object, object> pipeable = null!;
-        
+
         var exception =
-            Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add<object, object, object, object>(null!, pipeable));
+            Assert.Throws<ArgumentNullException>(() =>
+                PipeExtensions.Add<object, object, object, object>(null!, pipeable));
         Assert.Equal("pipe", exception.ParamName);
     }
 
@@ -19,7 +20,7 @@ public class PipeExtensionsTests
     {
         var pipe = new Pipe();
         IPipeable<object, object> pipeable = null!;
-        
+
         var exception =
             Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add(pipe, pipeable));
         Assert.Equal("pipeable", exception.ParamName);
@@ -33,14 +34,15 @@ public class PipeExtensionsTests
 
         PipeExtensions.Add(pipe, pipeable);
     }
-    
+
     [Fact]
     public void Test_Add_Delegate_PipeIsNull()
     {
         Func<object, object> pipeable = null!;
-        
+
         var exception =
-            Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add<object, object, object, object>(null!, pipeable));
+            Assert.Throws<ArgumentNullException>(() =>
+                PipeExtensions.Add<object, object, object, object>(null!, pipeable));
         Assert.Equal("pipe", exception.ParamName);
     }
 
@@ -49,7 +51,7 @@ public class PipeExtensionsTests
     {
         var pipe = new Pipe();
         Func<object, object> pipeable = null!;
-        
+
         var exception =
             // ReSharper disable once InvokeAsExtensionMethod
             Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add(pipe, pipeable));
@@ -66,14 +68,15 @@ public class PipeExtensionsTests
         // ReSharper disable once InvokeAsExtensionMethod
         PipeExtensions.Add(pipe, pipeable);
     }
-    
+
     [Fact]
     public void Test_Add_AsyncDelegate_PipeIsNull()
     {
         Func<object, Task<object>> pipeable = null!;
-        
+
         var exception =
-            Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add<object, object, object, object>(null!, pipeable!));
+            Assert.Throws<ArgumentNullException>(() =>
+                PipeExtensions.Add<object, object, object, object>(null!, pipeable!));
         Assert.Equal("pipe", exception.ParamName);
     }
 
@@ -82,7 +85,7 @@ public class PipeExtensionsTests
     {
         var pipe = new Pipe();
         Func<object, Task<object>> pipeable = null!;
-        
+
         var exception =
             // ReSharper disable once InvokeAsExtensionMethod
             Assert.Throws<ArgumentNullException>(() => PipeExtensions.Add(pipe, pipeable!));

@@ -10,10 +10,10 @@ public class TypeMapTests
         var typeMapping = new TypeMapping<string, int>(int.Parse);
         // ReSharper disable once UseObjectOrCollectionInitializer
         var typeMap = new TypeMap<int>();
-        
+
         typeMap.Add(typeMapping);
         typeMap.Add(typeMapping);
-        
+
         Assert.Collection(typeMap,
             result => Assert.Equal(typeMapping.Type, result.Type),
             result => Assert.Equal(typeMapping.Type, result.Type));
@@ -25,13 +25,10 @@ public class TypeMapTests
         var typeMapping = new TypeMapping<string, int>(int.Parse);
         // ReSharper disable once UseObjectOrCollectionInitializer
         var typeMap = new TypeMap<int>();
-        
+
         typeMap.Add(typeMapping);
         typeMap.Add(typeMapping);
 
-        foreach (var result in (IEnumerable) typeMap)
-        {
-            Assert.Equal(typeof(string), ((dynamic) result).Type);
-        }
+        foreach (var result in (IEnumerable)typeMap) Assert.Equal(typeof(string), ((dynamic)result).Type);
     }
 }

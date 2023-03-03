@@ -9,10 +9,9 @@ public static class InputConverter
         convertedInput = default;
 
         if (input is not T i) return false;
-        
+
         convertedInput = i;
         return true;
-
     }
 
     public static T ConvertInput<T>(object? input)
@@ -25,14 +24,12 @@ public static class InputConverter
     public static T ConvertInputByTypeMap<T>(object? input, TypeMap<T> typeMap)
     {
         if (typeMap == null) throw new ArgumentNullException(nameof(typeMap));
-        
+
         if (input == null) throw new PipeInputNullException(nameof(input));
 
         foreach (var mapping in typeMap)
-        {
             if (TryConvertInput(mapping.Type, input, out var convertedInput))
                 return mapping.Mapper(convertedInput!);
-        }
 
         throw new PipeInputNotSupportedException(input.GetType(), typeof(T));
     }

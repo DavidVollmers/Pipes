@@ -17,9 +17,9 @@ public class ServicePipeIntegrationTests
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<CounterService>();
         serviceCollection.AddTransient<ServicePipeable>();
-        
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
-        
+
         StaticServicePipe.Activate(serviceProvider);
 
         var counter = serviceProvider.GetRequiredService<CounterService>();
@@ -27,18 +27,18 @@ public class ServicePipeIntegrationTests
 
         var result = StaticServicePipe.Execute(PipeInput.Empty);
         Assert.Equal(1, result);
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(1, counter.Value);
-        
+
         result = StaticServicePipe.Execute(PipeInput.Empty);
         Assert.Equal(2, result);
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(2, counter.Value);
-        
+
         StaticServicePipe.Reset();
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(2, counter.Value);
     }
@@ -49,14 +49,14 @@ public class ServicePipeIntegrationTests
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton<CounterService>();
         serviceCollection.AddTransient<AsyncServicePipeable>();
-        
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        var servicePipe = new ServicePipe<object, int>()
+        var servicePipe = new ServicePipe<object, int>
         {
             typeof(AsyncServicePipeable)
         };
-        
+
         servicePipe.Activate(serviceProvider);
 
         var counter = serviceProvider.GetRequiredService<CounterService>();
@@ -64,18 +64,18 @@ public class ServicePipeIntegrationTests
 
         var result = servicePipe.Execute(PipeInput.Empty);
         Assert.Equal(1, result);
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(1, counter.Value);
-        
+
         result = servicePipe.Execute(PipeInput.Empty);
         Assert.Equal(2, result);
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(2, counter.Value);
-        
+
         servicePipe.Reset();
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(2, counter.Value);
     }

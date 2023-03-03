@@ -7,7 +7,7 @@ public class PipeIntegrationTests
     [Fact]
     public async Task Test_EnumerateAndReadFileContentAsync()
     {
-        var expectedContent = "Lorem Ipsum dolor sit amet.";
+        const string expectedContent = "Lorem Ipsum dolor sit amet.";
         var guid = Guid.NewGuid();
         var path = Path.GetTempPath() + guid + ".txt";
         await File.WriteAllTextAsync(path, expectedContent);
@@ -40,7 +40,9 @@ public class PipeIntegrationTests
         var pipe = new Pipe<int, int>
         {
             (int i) => i * 2,
+#pragma warning disable CS1998
             async (int i) => i + 1,
+#pragma warning restore CS1998
         };
 
         var result = pipe.Execute(input);
@@ -53,8 +55,10 @@ public class PipeIntegrationTests
         var input = new Random().Next();
         var pipe = new Pipe<int, int>
         {
+#pragma warning disable CS1998
             async (int i) => i + 1,
-            (int i) => i * 2,
+#pragma warning restore CS1998
+            (int i) => i * 2
         };
 
         var result = await pipe.ExecuteAsync(input);

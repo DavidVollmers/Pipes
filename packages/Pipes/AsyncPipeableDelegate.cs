@@ -11,7 +11,10 @@ public class AsyncPipeableDelegate<TInput, TOutput> : IPipeable<object, object>
         _pipeable = pipeable;
     }
 
-    public object? ConvertInput(object? input) => InputConverter.ConvertInput<TInput>(input);
+    public object? ConvertInput(object? input)
+    {
+        return InputConverter.ConvertInput<TInput>(input);
+    }
 
     public void Execute(IPipe<object, object?> pipe)
     {

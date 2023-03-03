@@ -24,7 +24,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input, result.File!.FullName);
     }
 
@@ -37,7 +37,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input.FullName, result.File!.FullName);
     }
 
@@ -53,7 +53,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input.File.FullName, result.File!.FullName);
     }
 

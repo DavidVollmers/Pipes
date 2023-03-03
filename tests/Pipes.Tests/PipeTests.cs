@@ -38,15 +38,15 @@ public class PipeTests
     [Fact]
     public async Task Test_Output_Async()
     {
-        var i = new Random().Next();
+        var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
             new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
-        var result = await pipe.ExecuteAsync(i);
-        Assert.Equal(i * 2, result);
-        Assert.Equal(i * 2, pipe.Output);
+        var result = await pipe.ExecuteAsync(integer);
+        Assert.Equal(integer * 2, result);
+        Assert.Equal(integer * 2, pipe.Output);
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class PipeTests
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
         var pipe = new Pipe();
-        
+
         pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
@@ -112,13 +112,10 @@ public class PipeTests
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
         var pipe = new Pipe();
-        
+
         pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
-        foreach (var result in (IEnumerable) pipe)
-        {
-            Assert.IsType<EmptyPipeable>(result);
-        }
+        foreach (var result in (IEnumerable)pipe) Assert.IsType<EmptyPipeable>(result);
     }
 }

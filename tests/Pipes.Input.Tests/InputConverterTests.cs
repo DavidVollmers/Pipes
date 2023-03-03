@@ -31,7 +31,7 @@ public class InputConverterTests
     public void Test_ConvertInput_Null()
     {
         var exception = Assert.Throws<PipeInputNullException>(() => InputConverter.ConvertInput<object>(null));
-        Assert.Equal("input", exception.InputName); 
+        Assert.Equal("input", exception.InputName);
     }
 
     [Fact]
@@ -47,10 +47,10 @@ public class InputConverterTests
     public void Test_ConvertInput_NoMatch()
     {
         var input = 1245125;
-        
+
         var exception = Assert.Throws<PipeInputNotSupportedException>(() => InputConverter.ConvertInput<string>(input));
-        Assert.Equal(input.GetType(), exception.InputType); 
-        Assert.Equal(typeof(string), exception.TargetType); 
+        Assert.Equal(input.GetType(), exception.InputType);
+        Assert.Equal(typeof(string), exception.TargetType);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class InputConverterTests
     public void Test_ConvertInputByTypeMap_Null()
     {
         var typeMap = new TypeMap<object>();
-        
+
         var exception =
             Assert.Throws<PipeInputNullException>(() => InputConverter.ConvertInputByTypeMap(null, typeMap));
         Assert.Equal("input", exception.InputName);
@@ -92,7 +92,7 @@ public class InputConverterTests
         var input = expectedConversion.ToString();
         var typeMap = new TypeMap<int>
         {
-            (DateTime dt) => (int) dt.Ticks,
+            (DateTime dt) => (int)dt.Ticks,
             (string s) => int.Parse(s)
         };
 
@@ -106,7 +106,7 @@ public class InputConverterTests
         var input = 4.ToString();
         var typeMap = new TypeMap<int>
         {
-            (DateTime dt) => (int) dt.Ticks,
+            (DateTime dt) => (int)dt.Ticks
         };
 
         var exception =

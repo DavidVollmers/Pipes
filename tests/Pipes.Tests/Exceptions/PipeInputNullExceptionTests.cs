@@ -7,7 +7,7 @@ public class PipeInputNullExceptionTests
     {
         var inputName = Guid.NewGuid().ToString();
         var expectedMessage = new InvalidPipeInputException(inputName, "null").Message;
-        
+
         var exception = new PipeInputNullException(inputName);
         Assert.Equal(expectedMessage, exception.Message);
         Assert.Equal(inputName, exception.InputName);
