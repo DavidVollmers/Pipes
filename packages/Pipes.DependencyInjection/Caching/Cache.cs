@@ -8,24 +8,25 @@ public static class Cache
     private static IPipeable<object, object> CacheService(Type type, CacheFlags cacheFlags)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
-        var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
-        if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
-        return new PipeableCache<object, object>(new PipeableType(type, pipeableInterface), cacheFlags);
+        // var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
+        // if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
+        // return new PipeableType(type, cacheFlags);
+        return null;
     }
 
-    public static IPipeable<object, object> Output<TType>()
+    public static IPipeable<object, object> Output<T>()
     {
-        return CacheService(typeof(TType), CacheFlags.Output);
+        return CacheService(typeof(T), CacheFlags.Output);
     }
 
-    public static IPipeable<object, object> Input<TType>()
+    public static IPipeable<object, object> Input<T>()
     {
-        return CacheService(typeof(TType), CacheFlags.Input);
+        return CacheService(typeof(T), CacheFlags.Input);
     }
 
-    public static IPipeable<object, object> Everything<TType>()
+    public static IPipeable<object, object> Everything<T>()
     {
-        return CacheService(typeof(TType), CacheFlags.Input & CacheFlags.Output);
+        return CacheService(typeof(T), CacheFlags.Input & CacheFlags.Output);
     }
     
     public static IPipeable<TInput, TOutput> Output<TInput, TOutput>(IPipeable<TInput, TOutput> pipeable)

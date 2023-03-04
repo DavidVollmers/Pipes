@@ -62,10 +62,7 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
     public ServicePipe<TInput, TOutput> Add(Type type)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
-        var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
-        if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
-        var pipeableType = new PipeableType(type, pipeableInterface);
-        Add(pipeableType);
+        Add(new PipeableType(type));
         return this;
     }
 
@@ -87,11 +84,11 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
                     pipeableType.Activate(_scope.ServiceProvider, _serviceInjection);
                     _pipeableTypes.Add(pipeableType);
                     break;
-                case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType } pipeableCache:
-                    pipeableServiceType.Activate(_scope.ServiceProvider, _serviceInjection);
-                    _pipeableTypes.Add(pipeableServiceType);
-                    _pipeableCaches.Add(pipeableCache);
-                    break;
+                // case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType } pipeableCache:
+                //     pipeableServiceType.Activate(_scope.ServiceProvider, _serviceInjection);
+                //     _pipeableTypes.Add(pipeableServiceType);
+                //     _pipeableCaches.Add(pipeableCache);
+                //     break;
             }
         }
 

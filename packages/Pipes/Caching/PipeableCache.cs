@@ -1,15 +1,14 @@
 ﻿namespace Pipes.Caching;
 
-internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
+internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>, IDisposable
 {
+    private readonly IPipeable<TInput, TOutput> _pipeable;
     private readonly CacheFlags _cacheFlags;
 
     private bool _inputCached;
     private TInput? _inputCache;
     private bool _outputCached;
     private TOutput? _outputCache;
-
-    public IPipeable<TInput, TOutput> Pipeable { get; }
 
     public TOutput? OutputCache
     {
@@ -23,7 +22,7 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
 
     public PipeableCache(IPipeable<TInput, TOutput> pipeable, CacheFlags cacheFlags)
     {
-        Pipeable = pipeable;
+        _pipeable = pipeable;
         _cacheFlags = cacheFlags;
     }
 
@@ -31,7 +30,7 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
     {
         if (_inputCached) return _inputCache;
 
-        var result = Pipeable.ConvertInput(input);
+        var result = _pipeable.ConvertInput(input);
         if ((_cacheFlags & CacheFlags.Input) == 0) return result;
 
         _inputCache = result;
@@ -48,7 +47,7 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
         }
 
         var cachePipe = new OutputCachePipeImplementation<TInput, TOutput>(this, pipe);
-        Pipeable.Execute(cachePipe!);
+        _pipeable.Execute(cachePipe!);
     }
 
     public Task ExecuteAsync(IPipe<TInput, TOutput?> pipe, CancellationToken cancellationToken = default)
@@ -59,7 +58,7 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
         }
 
         var cachePipe = new OutputCachePipeImplementation<TInput, TOutput>(this, pipe);
-        return Pipeable.ExecuteAsync(cachePipe!, cancellationToken);
+        return _pipeable.ExecuteAsync(cachePipe!, cancellationToken);
     }
 
     public void Clear()
@@ -68,5 +67,10 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
         _outputCached = false;
         _inputCache = default;
         _inputCached = false;
+    }
+
+    public void Dispose()
+    {
+        Clear();
     }
 }

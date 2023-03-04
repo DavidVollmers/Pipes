@@ -14,10 +14,13 @@ internal class PipeableType : IPipeable<object, object>
 
     public Type Type { get; }
 
-    public PipeableType(Type type, Type pipeableInterface)
+    public PipeableType(Type type)
     {
         Type = type;
 
+        var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
+        if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
+        
         _inputType = pipeableInterface.GenericTypeArguments[0];
         _outputType = pipeableInterface.GenericTypeArguments[1];
     }
