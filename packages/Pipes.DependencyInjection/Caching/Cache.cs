@@ -11,7 +11,7 @@ public static class Cache
         // var pipeableInterface = type.GetInterface(typeof(IPipeable<,>).Name);
         // if (pipeableInterface == null) throw new Exception("Type must be assignable to IPipeable.");
         // return new PipeableType(type, cacheFlags);
-        return null;
+        return new PipeableServiceCache(type, cacheFlags);
     }
 
     public static IPipeable<object, object> Output<T>()

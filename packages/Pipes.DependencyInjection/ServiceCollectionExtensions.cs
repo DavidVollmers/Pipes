@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pipes.Caching;
 using Pipes.DependencyInjection.Caching;
 
 namespace Pipes.DependencyInjection;
@@ -12,7 +11,7 @@ public static class ServiceCollectionExtensions
         if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
         if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
 
-        // serviceCollection.AddScoped<>();
+        serviceCollection.AddScoped<ServiceCacheHandler>();
         
         foreach (var pipeable in servicePipe)
         {

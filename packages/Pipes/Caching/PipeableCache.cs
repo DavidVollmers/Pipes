@@ -1,6 +1,6 @@
 ﻿namespace Pipes.Caching;
 
-internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>, IDisposable
+internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
     private readonly IPipeable<TInput, TOutput> _pipeable;
     private readonly CacheFlags _cacheFlags;
@@ -67,10 +67,5 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>, IDis
         _outputCached = false;
         _inputCache = default;
         _inputCached = false;
-    }
-
-    public void Dispose()
-    {
-        Clear();
     }
 }
