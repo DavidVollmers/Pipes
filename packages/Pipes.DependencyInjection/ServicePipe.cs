@@ -1,4 +1,5 @@
-﻿using Pipes.Caching;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
