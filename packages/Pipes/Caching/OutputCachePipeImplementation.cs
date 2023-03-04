@@ -2,8 +2,8 @@
 
 internal class OutputCachePipeImplementation<TInput, TOutput> : IPipe<TInput, TOutput>
 {
-    private readonly PipeableCache<TInput, TOutput> _pipeable;
     private readonly IPipe<TInput, TOutput> _pipe;
+    private readonly PipeableCache<TInput, TOutput> _pipeable;
 
     public OutputCachePipeImplementation(PipeableCache<TInput, TOutput> pipeable, IPipe<TInput, TOutput> pipe)
     {
@@ -12,7 +12,7 @@ internal class OutputCachePipeImplementation<TInput, TOutput> : IPipe<TInput, TO
     }
 
     public TInput? Input => _pipe.Input;
-    
+
     public void Pipe(TOutput? input)
     {
         _pipeable.OutputCache = input;

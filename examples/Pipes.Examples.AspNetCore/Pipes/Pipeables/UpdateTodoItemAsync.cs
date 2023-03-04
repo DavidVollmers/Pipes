@@ -14,8 +14,10 @@ public class UpdateTodoItemAsync : Pipeable<UpdateTodoItemRequest, TodoItem>
         _storageContext = storageContext;
     }
 
-    public override UpdateTodoItemRequest ConvertInput(object? input) =>
-        InputConverter.ConvertInput<UpdateTodoItemRequest>(input);
+    public override UpdateTodoItemRequest ConvertInput(object? input)
+    {
+        return InputConverter.ConvertInput<UpdateTodoItemRequest>(input);
+    }
 
     public override async Task ExecuteAsync(IPipe<UpdateTodoItemRequest, TodoItem?> pipe,
         CancellationToken cancellationToken = default)
@@ -25,7 +27,7 @@ public class UpdateTodoItemAsync : Pipeable<UpdateTodoItemRequest, TodoItem>
         item!.Todo = pipe.Input.Todo;
         item.IsPublic = pipe.Input.IsPublic;
         item.IsDone = pipe.Input.IsDone;
-        
+
         await _storageContext.UpdateTodoItemAsync(item);
 
         await pipe.PipeAsync(item, cancellationToken);

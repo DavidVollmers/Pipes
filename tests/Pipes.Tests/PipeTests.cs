@@ -24,7 +24,7 @@ public class PipeTests
 
         Assert.Null(pipe.Output);
     }
-    
+
     [Fact]
     public void Test_Execute_WithOutput_NoPipeables()
     {
@@ -32,7 +32,7 @@ public class PipeTests
 
         var output = pipe.Execute();
         Assert.Null(output);
-        
+
         Assert.Null(pipe.Output);
     }
 
@@ -43,7 +43,7 @@ public class PipeTests
 
         var output = await pipe.ExecuteAsync();
         Assert.Null(output);
-        
+
         Assert.Null(pipe.Output);
     }
 

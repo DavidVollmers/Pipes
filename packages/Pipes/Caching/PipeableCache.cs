@@ -2,13 +2,19 @@
 
 internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
 {
-    private readonly IPipeable<TInput, TOutput> _pipeable;
     private readonly CacheFlags _cacheFlags;
+    private readonly IPipeable<TInput, TOutput> _pipeable;
+    private TInput? _inputCache;
 
     private bool _inputCached;
-    private TInput? _inputCache;
-    private bool _outputCached;
     private TOutput? _outputCache;
+    private bool _outputCached;
+
+    public PipeableCache(IPipeable<TInput, TOutput> pipeable, CacheFlags cacheFlags)
+    {
+        _pipeable = pipeable;
+        _cacheFlags = cacheFlags;
+    }
 
     public TOutput? OutputCache
     {
@@ -18,12 +24,6 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
             _outputCache = value;
             _outputCached = true;
         }
-    }
-
-    public PipeableCache(IPipeable<TInput, TOutput> pipeable, CacheFlags cacheFlags)
-    {
-        _pipeable = pipeable;
-        _cacheFlags = cacheFlags;
     }
 
     public TInput? ConvertInput(object? input)
@@ -52,10 +52,7 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<TInput, TOutput>
 
     public Task ExecuteAsync(IPipe<TInput, TOutput?> pipe, CancellationToken cancellationToken = default)
     {
-        if (_outputCached)
-        {
-            return pipe.PipeAsync(OutputCache, cancellationToken);
-        }
+        if (_outputCached) return pipe.PipeAsync(OutputCache, cancellationToken);
 
         var cachePipe = new OutputCachePipeImplementation<TInput, TOutput>(this, pipe);
         return _pipeable.ExecuteAsync(cachePipe!, cancellationToken);

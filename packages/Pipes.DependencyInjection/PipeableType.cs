@@ -7,13 +7,6 @@ internal class PipeableType : IPipeable<object, object>
 {
     private ServiceInjection _serviceInjection;
 
-    protected IServiceProvider? ServiceProvider { get; private set; }
-
-    public object? Pipeable { get; private set; }
-    public Type InputType { get; }
-    public Type OutputType { get; }
-    public Type Type { get; }
-
     public PipeableType(Type type)
     {
         Type = type;
@@ -24,6 +17,13 @@ internal class PipeableType : IPipeable<object, object>
         InputType = pipeableInterface.GenericTypeArguments[0];
         OutputType = pipeableInterface.GenericTypeArguments[1];
     }
+
+    protected IServiceProvider? ServiceProvider { get; private set; }
+
+    public object? Pipeable { get; private set; }
+    public Type InputType { get; }
+    public Type OutputType { get; }
+    public Type Type { get; }
 
     public virtual object? ConvertInput(object? input)
     {

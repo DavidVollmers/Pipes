@@ -7,6 +7,11 @@ internal class ServiceCacheHandler : IDisposable
 {
     private readonly IDictionary<string, object> _caches = new Dictionary<string, object>();
 
+    public void Dispose()
+    {
+        _caches.Clear();
+    }
+
     public object? ConvertInput(PipeableServiceCache serviceCache, object? input)
     {
         var cache = VerifyCache(serviceCache);
@@ -49,10 +54,5 @@ internal class ServiceCacheHandler : IDisposable
 
         _caches.Add(key, cache);
         return cache;
-    }
-
-    public void Dispose()
-    {
-        _caches.Clear();
     }
 }

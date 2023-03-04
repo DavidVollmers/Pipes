@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Pipes.Abstractions;
-using Pipes.Caching;
+﻿using Pipes.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
@@ -41,8 +39,8 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
 
 public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
 {
-    private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
     private readonly IList<PipeableCache<object, object>> _pipeableCaches = new List<PipeableCache<object, object>>();
+    private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
     private readonly ServiceInjection _serviceInjection;
 
     private bool _activated;
@@ -69,18 +67,10 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
 
         foreach (var pipeable in this)
         {
-            switch (pipeable)
-            {
-                case PipeableType pipeableType:
-                    pipeableType.Activate(serviceProvider, _serviceInjection);
-                    _pipeableTypes.Add(pipeableType);
-                    break;
-                // case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType } pipeableCache:
-                //     pipeableServiceType.Activate(_scope.ServiceProvider, _serviceInjection);
-                //     _pipeableTypes.Add(pipeableServiceType);
-                //     _pipeableCaches.Add(pipeableCache);
-                //     break;
-            }
+            if (pipeable is not PipeableType pipeableType) continue;
+
+            pipeableType.Activate(serviceProvider, _serviceInjection);
+            _pipeableTypes.Add(pipeableType);
         }
 
         _activated = true;

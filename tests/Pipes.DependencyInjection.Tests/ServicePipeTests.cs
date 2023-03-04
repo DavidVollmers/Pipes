@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Pipes.DependencyInjection.Tests.Pipeables;
+﻿using Pipes.DependencyInjection.Tests.Pipeables;
 
 namespace Pipes.DependencyInjection.Tests;
 

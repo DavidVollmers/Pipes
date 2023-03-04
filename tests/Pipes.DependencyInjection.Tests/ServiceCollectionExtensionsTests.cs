@@ -12,15 +12,16 @@ public class ServiceCollectionExtensionsTests
             ServiceCollectionExtensions.Add<object, object>(null!, null!, ServiceLifetime.Transient));
         Assert.Equal("serviceCollection", exception.ParamName);
     }
-    
+
     [Fact]
     public void Test_Add_ServicePipeIsNull()
     {
         var serviceCollection = new Mock<IServiceCollection>();
-        
+
         var exception = Assert.Throws<ArgumentNullException>(() =>
             // ReSharper disable once InvokeAsExtensionMethod
-            ServiceCollectionExtensions.Add<object, object>(serviceCollection.Object, null!, ServiceLifetime.Transient));
+            ServiceCollectionExtensions.Add<object, object>(serviceCollection.Object, null!,
+                ServiceLifetime.Transient));
         Assert.Equal("servicePipe", exception.ParamName);
     }
 

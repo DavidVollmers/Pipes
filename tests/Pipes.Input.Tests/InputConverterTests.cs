@@ -157,9 +157,10 @@ public class InputConverterTests
     public void Test_ConvertInputToEnumerable_PipeInputNotSupportedException()
     {
         const int input = 4;
-        
+
         var exception =
-            Assert.Throws<PipeInputNotSupportedException>(() => InputConverter.ConvertInputToEnumerable<string>(input, false));
+            Assert.Throws<PipeInputNotSupportedException>(() =>
+                InputConverter.ConvertInputToEnumerable<string>(input, false));
         Assert.Equal(typeof(int), exception.InputType);
         Assert.Equal(typeof(string), exception.TargetType);
     }

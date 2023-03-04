@@ -10,10 +10,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IStorageContext, InMemoryStorage>();
 
-builder.Services.AddScoped(RequestPipes.Todo.Get);
-builder.Services.AddScoped(RequestPipes.Todo.GetAll);
-builder.Services.AddScoped(RequestPipes.Todo.Update);
-builder.Services.AddScoped(RequestPipes.Todo.Create);
+//TODO allow scoped/singleton 
+builder.Services.AddTransient(RequestPipes.Todo.Get);
+builder.Services.AddTransient(RequestPipes.Todo.GetAll);
+builder.Services.AddTransient(RequestPipes.Todo.Update);
+builder.Services.AddTransient(RequestPipes.Todo.Create);
 
 var app = builder.Build();
 

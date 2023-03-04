@@ -12,8 +12,11 @@ public class GetAllTodoAsync : Pipeable<object, IEnumerable<TodoItem>>
     {
         _storage = storage;
     }
-    
-    public override object? ConvertInput(object? input) => input;
+
+    public override object? ConvertInput(object? input)
+    {
+        return input;
+    }
 
     public override async Task ExecuteAsync(IPipe<object, IEnumerable<TodoItem>?> pipe,
         CancellationToken cancellationToken = default)

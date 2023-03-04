@@ -13,8 +13,10 @@ public class VerifyTodoPermissions : Pipeable<IEnumerable<TodoItem>, IEnumerable
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public override IEnumerable<TodoItem> ConvertInput(object? input) =>
-        InputConverter.ConvertInputToEnumerable<TodoItem>(input);
+    public override IEnumerable<TodoItem> ConvertInput(object? input)
+    {
+        return InputConverter.ConvertInputToEnumerable<TodoItem>(input);
+    }
 
     public override void Execute(IPipe<IEnumerable<TodoItem>, IEnumerable<TodoItem>> pipe)
     {

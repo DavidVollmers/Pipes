@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Pipes.DependencyInjection.Caching;
 using Pipes.DependencyInjection.Tests.Pipeables;
-using Pipes.Input;
 
 namespace Pipes.DependencyInjection.Tests;
 
@@ -54,7 +53,7 @@ public class ServicePipeIntegrationTests
         {
             typeof(AsyncServicePipeable)
         };
-        
+
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddTransient(servicePipe);
         serviceCollection.AddSingleton<CounterService>();
@@ -94,11 +93,11 @@ public class ServicePipeIntegrationTests
         {
             Cache.Output<ServicePipeable>()
         };
-        
+
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddTransient(servicePipe);
         serviceCollection.AddSingleton<CounterService>();
-        
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         servicePipe.Activate(serviceProvider);
@@ -134,11 +133,11 @@ public class ServicePipeIntegrationTests
         {
             Cache.Output<ServicePipeable>()
         };
-        
+
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddTransient(servicePipe);
         serviceCollection.AddSingleton<CounterService>();
-        
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var scope = serviceProvider.CreateScope();
@@ -163,16 +162,16 @@ public class ServicePipeIntegrationTests
         Assert.Equal(1, counter.Value);
 
         scope.Dispose();
-        
+
         servicePipe.Reset();
         Assert.Equal(0, servicePipe.Output);
-        
+
         servicePipe.Activate(serviceProvider);
-        
+
         result = servicePipe.Execute();
         Assert.Equal(2, result);
         Assert.Equal(2, servicePipe.Output);
-        
+
         counter = serviceProvider.GetRequiredService<CounterService>();
         Assert.Equal(2, counter.Value);
     }

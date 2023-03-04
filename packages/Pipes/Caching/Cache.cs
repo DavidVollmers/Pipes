@@ -13,7 +13,7 @@ public static class Cache
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
         return new PipeableCache<TInput, TOutput>(pipeable, CacheFlags.Input);
     }
-    
+
     public static IPipeable<TInput, TOutput> Everything<TInput, TOutput>(IPipeable<TInput, TOutput> pipeable)
     {
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));

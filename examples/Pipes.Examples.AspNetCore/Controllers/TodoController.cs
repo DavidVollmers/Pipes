@@ -40,7 +40,7 @@ public class TodoController : ControllerBase
         if (requestedBy == null) return Unauthorized();
 
         Login(requestedBy);
-        
+
         var item = await RequestPipes.Todo.Create.ExecuteAsync(request, cancellationToken);
 
         return Ok(item);
@@ -53,7 +53,7 @@ public class TodoController : ControllerBase
         if (requestedBy != null) Login(requestedBy);
 
         if (id != request.Id) return BadRequest();
-        
+
         var existing = await RequestPipes.Todo.Get.ExecuteAsync(id, cancellationToken).ConfigureAwait(false);
 
         if (existing == null) return NotFound();

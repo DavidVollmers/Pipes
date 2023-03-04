@@ -14,7 +14,10 @@ public class GetTodoAsync : Pipeable<Guid, TodoItem?>
         _storage = storage;
     }
 
-    public override Guid ConvertInput(object? input) => InputConverter.ConvertInput<Guid>(input);
+    public override Guid ConvertInput(object? input)
+    {
+        return InputConverter.ConvertInput<Guid>(input);
+    }
 
     public override async Task ExecuteAsync(IPipe<Guid, TodoItem?> pipe, CancellationToken cancellationToken = default)
     {

@@ -12,18 +12,13 @@ public static class ServiceCollectionExtensions
         if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
 
         serviceCollection.AddScoped<ServiceCacheHandler>();
-        
+
         foreach (var pipeable in servicePipe)
         {
-            var serviceDescriptor = pipeable switch
-            {
-                PipeableType p => new ServiceDescriptor(p.Type, p.Type, serviceLifetime),
-                // PipeableCache<object, object> { Pipeable: PipeableType s } => new ServiceDescriptor(s.Type, s.Type,
-                //     serviceLifetime),
-                _ => null
-            };
+            if (pipeable is not PipeableType p) continue;
 
-            if (serviceDescriptor != null) serviceCollection.Add(serviceDescriptor);
+            var serviceDescriptor = new ServiceDescriptor(p.Type, p.Type, serviceLifetime);
+            serviceCollection.Add(serviceDescriptor);
         }
 
         return serviceCollection;

@@ -35,6 +35,13 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
 
     public new TOutput? Output { get; private set; }
 
+    public void Dispose()
+    {
+        Reset();
+
+        GC.SuppressFinalize(this);
+    }
+
     public IEnumerator<IPipeable<object, object>> GetEnumerator()
     {
         return _pipeables.GetEnumerator();
@@ -102,12 +109,5 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
         _pipeables.Add(pipeable);
         return this;
-    }
-
-    public void Dispose()
-    {
-        Reset();
-
-        GC.SuppressFinalize(this);
     }
 }

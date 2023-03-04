@@ -7,8 +7,8 @@ namespace Pipes.Examples.AspNetCore.Pipes.Pipeables;
 
 public class CreateTodoAsync : Pipeable<CreateTodoItemRequest, TodoItem>
 {
-    private readonly IStorageContext _storageContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IStorageContext _storageContext;
 
     public CreateTodoAsync(IStorageContext storageContext, IHttpContextAccessor httpContextAccessor)
     {
@@ -16,8 +16,10 @@ public class CreateTodoAsync : Pipeable<CreateTodoItemRequest, TodoItem>
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public override CreateTodoItemRequest ConvertInput(object? input) =>
-        InputConverter.ConvertInput<CreateTodoItemRequest>(input);
+    public override CreateTodoItemRequest ConvertInput(object? input)
+    {
+        return InputConverter.ConvertInput<CreateTodoItemRequest>(input);
+    }
 
     public override async Task ExecuteAsync(IPipe<CreateTodoItemRequest, TodoItem?> pipe,
         CancellationToken cancellationToken = default)
