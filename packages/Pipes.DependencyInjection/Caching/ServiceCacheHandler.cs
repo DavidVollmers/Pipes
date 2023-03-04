@@ -11,7 +11,7 @@ internal class ServiceCacheHandler : IDisposable
     {
         var cache = VerifyCache(serviceCache);
 
-        var convertInputMethod = serviceCache.Type.GetMethod(nameof(ConvertInput))!;
+        var convertInputMethod = cache.GetType().GetMethod(nameof(ConvertInput))!;
         return convertInputMethod.Invoke(cache, new[] { input });
     }
 
@@ -22,7 +22,7 @@ internal class ServiceCacheHandler : IDisposable
             TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
                 serviceCache.OutputType, pipe);
 
-        var executeMethod = serviceCache.Type.GetMethod(nameof(Execute));
+        var executeMethod = cache.GetType().GetMethod(nameof(Execute));
         executeMethod!.Invoke(cache, new[] { genericPipe });
     }
 
@@ -34,7 +34,7 @@ internal class ServiceCacheHandler : IDisposable
             TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
                 serviceCache.OutputType, pipe);
 
-        var executeAsyncMethod = serviceCache.Type.GetMethod(nameof(ExecuteAsync));
+        var executeAsyncMethod = cache.GetType().GetMethod(nameof(ExecuteAsync));
         return (Task)executeAsyncMethod!.Invoke(cache, new[] { genericPipe, cancellationToken })!;
     }
 

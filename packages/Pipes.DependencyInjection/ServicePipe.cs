@@ -39,24 +39,17 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
     }
 }
 
-public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
+public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
 {
     private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
     private readonly IList<PipeableCache<object, object>> _pipeableCaches = new List<PipeableCache<object, object>>();
     private readonly ServiceInjection _serviceInjection;
 
-    private IServiceScope? _scope;
+    private bool _activated;
 
     public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation)
     {
         _serviceInjection = serviceInjection;
-    }
-
-    public void Dispose()
-    {
-        _scope?.Dispose();
-
-        GC.SuppressFinalize(this);
     }
 
     public ServicePipe<TInput, TOutput> Add(Type type)
@@ -70,18 +63,16 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
     {
         if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
-        if (_scope != null)
+        if (_activated)
             throw new InvalidOperationException(
                 "Service pipe already activated. Use .Reset() before activating it again.");
-
-        _scope = serviceProvider.CreateScope();
 
         foreach (var pipeable in this)
         {
             switch (pipeable)
             {
                 case PipeableType pipeableType:
-                    pipeableType.Activate(_scope.ServiceProvider, _serviceInjection);
+                    pipeableType.Activate(serviceProvider, _serviceInjection);
                     _pipeableTypes.Add(pipeableType);
                     break;
                 // case PipeableCache<object, object> { Pipeable: PipeableType pipeableServiceType } pipeableCache:
@@ -91,6 +82,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
                 //     break;
             }
         }
+
+        _activated = true;
 
         return this;
     }
@@ -105,12 +98,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IDisposable
 
         _pipeableCaches.Clear();
 
-        if (_scope != null)
-        {
-            _scope.Dispose();
-            _scope = null;
-        }
-
         base.Reset();
+
+        _activated = false;
     }
 }

@@ -69,7 +69,7 @@ internal class PipeableType : IPipeable<object, object>
         Pipeable = null;
     }
 
-    protected virtual void ActivateType()
+    private void ActivateType()
     {
         Pipeable = ServiceProvider!.GetRequiredService(Type);
     }

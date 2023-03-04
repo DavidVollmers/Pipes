@@ -6,8 +6,6 @@ namespace Pipes.DependencyInjection.Caching;
 
 internal class PipeableServiceCache : PipeableType
 {
-    private ServiceCacheHandler? _cacheHandler;
-
     public CacheFlags CacheFlags { get; }
 
     public PipeableServiceCache(Type type, CacheFlags cacheFlags) : base(type)
@@ -17,23 +15,22 @@ internal class PipeableServiceCache : PipeableType
 
     public override object? ConvertInput(object? input)
     {
-        return _cacheHandler!.ConvertInput(this, input);
+        var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
+        
+        return cacheHandler!.ConvertInput(this, input);
     }
 
     public override void Execute(IPipe<object, object?> pipe)
     {
-        _cacheHandler!.Execute(this, pipe);
+        var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
+        
+        cacheHandler!.Execute(this, pipe);
     }
 
     public override Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
     {
-        return _cacheHandler!.ExecuteAsync(this, pipe, cancellationToken);
-    }
-
-    protected override void ActivateType()
-    {
-        base.ActivateType();
-
-        _cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
+        var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
+        
+        return cacheHandler!.ExecuteAsync(this, pipe, cancellationToken);
     }
 }

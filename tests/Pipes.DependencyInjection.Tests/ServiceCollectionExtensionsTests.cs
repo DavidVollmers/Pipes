@@ -58,7 +58,7 @@ public class ServiceCollectionExtensionsTests
         // ReSharper disable once InvokeAsExtensionMethod
         ServiceCollectionExtensions.Add(serviceCollection.Object, servicePipe, ServiceLifetime.Transient);
 
-        serviceCollection.Verify(sc => sc.Add(It.IsAny<ServiceDescriptor>()), Times.Never);
+        serviceCollection.Verify(sc => sc.Add(It.IsAny<ServiceDescriptor>()), Times.Once);
     }
 
     [Fact]

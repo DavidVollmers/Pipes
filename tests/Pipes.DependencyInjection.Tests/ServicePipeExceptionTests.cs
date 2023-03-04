@@ -28,20 +28,12 @@ public class ServicePipeExceptionTests
     {
         var pipe = new ServicePipe();
 
-        var serviceScope = new Mock<IServiceScope>();
-
-        var serviceScopeFactory = new Mock<IServiceScopeFactory>();
-        serviceScopeFactory.Setup(ssf => ssf.CreateScope()).Returns(serviceScope.Object);
-
         var serviceProvider = new Mock<IServiceProvider>();
-        serviceProvider.Setup(sp => sp.GetService(It.IsAny<Type>())).Returns(serviceScopeFactory.Object);
 
         pipe.Activate(serviceProvider.Object);
 
         var exception = Assert.Throws<InvalidOperationException>(() => pipe.Activate(serviceProvider.Object));
         Assert.Equal("Service pipe already activated. Use .Reset() before activating it again.", exception.Message);
-
-        serviceScopeFactory.Verify(ssf => ssf.CreateScope(), Times.Once);
     }
 
     [Fact]
