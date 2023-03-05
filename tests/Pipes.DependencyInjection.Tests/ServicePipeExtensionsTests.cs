@@ -120,10 +120,6 @@ public class ServicePipeExtensionsTests
         serviceCollection.AddScoped(servicePipe);
         serviceCollection.AddSingleton<CounterService>();
         
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-        
-        servicePipe.Activate(serviceProvider);
-        
         servicePipe.EnsureScopeReset();
         
         Assert.False(servicePipe.Activated);
@@ -143,8 +139,8 @@ public class ServicePipeExtensionsTests
         
         var serviceProvider = serviceCollection.BuildServiceProvider();
         
-        servicePipe.Activate(serviceProvider);
-        
+        servicePipe.First<IPipeableService>().Activate(serviceProvider, ServiceInjection.OnActivation);
+
         servicePipe.EnsureScopeReset();
         
         Assert.False(servicePipe.Activated);

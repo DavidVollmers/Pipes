@@ -47,7 +47,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void Test_Add_NoPipeableType()
+    public void Test_Add_NoPipeableService()
     {
         var servicePipe = new ServicePipe
         {

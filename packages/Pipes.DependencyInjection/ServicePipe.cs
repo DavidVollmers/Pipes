@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.Abstractions;
+using Pipes.DependencyInjection.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
@@ -62,10 +64,9 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServicePipe
 
         foreach (var pipeable in this)
         {
-            if (pipeable is not PipeableService pipeableType) continue;
+            if (pipeable is not PipeableService pipeableService) continue;
 
-            pipeableType.Activate(serviceProvider, ServiceInjection);
-            _pipeableServices.Add(pipeableType);
+            pipeableService.Activate(serviceProvider, ServiceInjection);
         }
 
         Activated = true;
@@ -74,10 +75,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServicePipe
     public override void Reset()
     {
         base.Reset();
-        
-        foreach (var pipeableService in _pipeableServices) pipeableService.Reset();
 
-        _pipeableServices.Clear();
+        foreach (var pipeableService in _pipeableServices) pipeableService.Reset();
 
         Activated = false;
     }
@@ -91,6 +90,13 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServicePipe
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         Add(new PipeableService(type));
+        return this;
+    }
+
+    public override Pipe<TInput, TOutput> Add(IPipeable<object, object> pipeable)
+    {
+        base.Add(pipeable);
+        if (pipeable is PipeableService pipeableService) _pipeableServices.Add(pipeableService);
         return this;
     }
 }

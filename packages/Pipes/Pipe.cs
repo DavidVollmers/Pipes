@@ -112,7 +112,7 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
         return _pipeables.Count == 0 ? null : new PipeImplementation(this, _pipeables, 0, null, cancellationToken);
     }
 
-    public Pipe<TInput, TOutput> Add(IPipeable<object, object> pipeable)
+    public virtual Pipe<TInput, TOutput> Add(IPipeable<object, object> pipeable)
     {
         if (pipeable == null) throw new ArgumentNullException(nameof(pipeable));
         _pipeables.Add(pipeable);
