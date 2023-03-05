@@ -17,10 +17,12 @@ public static class ServiceCollectionExtensions
 
         foreach (var pipeable in servicePipe)
         {
-            if (pipeable is not PipeableService p) continue;
+            if (pipeable is not PipeableService pipeableService) continue;
 
-            var serviceDescriptor = new ServiceDescriptor(p.Type, p.Type, serviceLifetime);
+            var serviceDescriptor = new ServiceDescriptor(pipeableService.Type, pipeableService.Type, serviceLifetime);
             serviceCollection.Add(serviceDescriptor);
+
+            pipeableService.ServiceLifetime = serviceLifetime;
         }
 
         servicePipe.ServiceLifetime = serviceLifetime;

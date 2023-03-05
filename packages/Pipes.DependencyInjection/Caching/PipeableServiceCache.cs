@@ -9,8 +9,6 @@ internal class PipeableServiceCache : PipeableService, IPipeableCache
     public PipeableServiceCache(Type type, CacheFlags cacheFlags) : base(type)
     {
         CacheFlags = cacheFlags;
-
-        ServiceLifetime = ServiceLifetime.Scoped;
     }
 
     public CacheFlags CacheFlags { get; }

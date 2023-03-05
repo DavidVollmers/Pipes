@@ -19,7 +19,7 @@ internal class ServiceActivationMiddleware : IMiddleware
 
         next(context);
 
-        foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeReset(context.RequestServices);
+        foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeReset();
 
         return Task.CompletedTask;
     }

@@ -9,7 +9,7 @@ public static class ServicePipeExtensions
         if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
         if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
-        if (!servicePipe.Activated)
+        if (servicePipe is { Activated: false, ServiceLifetime: ServiceLifetime.Scoped })
         {
             servicePipe.Activate(serviceProvider);
             return;
@@ -23,12 +23,11 @@ public static class ServicePipeExtensions
         }
     }
 
-    public static void EnsureScopeReset(this IServicePipe servicePipe, IServiceProvider serviceProvider)
+    public static void EnsureScopeReset(this IServicePipe servicePipe)
     {
         if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
-        if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
-        if (servicePipe.ServiceLifetime == ServiceLifetime.Scoped)
+        if (servicePipe is { Activated: true, ServiceLifetime: ServiceLifetime.Scoped })
         {
             servicePipe.Reset();
             return;
@@ -36,7 +35,7 @@ public static class ServicePipeExtensions
 
         foreach (var service in servicePipe)
         {
-            if (service.ServiceLifetime != ServiceLifetime.Scoped) continue;
+            if (service.ServiceLifetime != ServiceLifetime.Scoped || !service.Activated) continue;
 
             service.Reset();
         }

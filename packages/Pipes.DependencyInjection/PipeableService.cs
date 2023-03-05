@@ -14,8 +14,6 @@ internal class PipeableService : IPipeable<object, object>, IPipeableService
 
         InputType = pipeableInterface.GenericTypeArguments[0];
         OutputType = pipeableInterface.GenericTypeArguments[1];
-
-        ServiceLifetime = ServiceLifetime.Transient;
     }
 
     protected IServiceProvider? ServiceProvider { get; private set; }
@@ -58,7 +56,7 @@ internal class PipeableService : IPipeable<object, object>, IPipeableService
 
     public bool Activated { get; private set; }
 
-    public ServiceLifetime ServiceLifetime { get; protected set; }
+    public ServiceLifetime ServiceLifetime { get; set; }
 
     public void Activate(IServiceProvider serviceProvider, ServiceInjection serviceInjection)
     {
