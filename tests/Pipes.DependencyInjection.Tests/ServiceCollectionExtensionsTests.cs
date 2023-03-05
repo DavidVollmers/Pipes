@@ -22,7 +22,7 @@ public class ServiceCollectionExtensionsTests
             // ReSharper disable once InvokeAsExtensionMethod
             ServiceCollectionExtensions.Add<object, object>(serviceCollection.Object, null!,
                 ServiceLifetime.Transient));
-        Assert.Equal("servicePipe", exception.ParamName);
+        Assert.Equal("pipe", exception.ParamName);
     }
 
     [Theory]
