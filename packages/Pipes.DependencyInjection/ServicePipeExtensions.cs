@@ -19,7 +19,7 @@ public static class ServicePipeExtensions
         {
             if (service.ServiceLifetime != ServiceLifetime.Scoped || service.Activated) continue;
 
-            service.Activate(serviceProvider, servicePipe.ServiceInjection);
+            service.Activate(serviceProvider, service.ServiceInjection);
         }
     }
 

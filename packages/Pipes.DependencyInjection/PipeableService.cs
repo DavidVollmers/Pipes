@@ -62,7 +62,9 @@ internal class PipeableService : IPipeable<object, object>, IPipeableService
 
     public void Activate(IServiceProvider serviceProvider, ServiceInjection serviceInjection)
     {
-        if (Activated) return;
+        if (Activated)
+            throw new InvalidOperationException(
+                "Pipeable service already activated. Use .Reset() before activating it again.");
 
         ServiceInjection = serviceInjection;
         ServiceProvider = serviceProvider;
