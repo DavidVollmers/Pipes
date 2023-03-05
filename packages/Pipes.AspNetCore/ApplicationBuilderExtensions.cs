@@ -10,7 +10,7 @@ public static class ApplicationBuilderExtensions
 
         var pipeBuilder = new PipeBuilder();
 
-        applicationBuilder.UseMiddleware<PipeActivationMiddleware>(pipeBuilder);
+        applicationBuilder.UseMiddleware<ServiceActivationMiddleware>(pipeBuilder.ServiceActivations);
         
         return pipeBuilder;
     }

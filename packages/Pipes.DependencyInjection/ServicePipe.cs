@@ -38,13 +38,14 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
     }
 }
 
-public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
+public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServiceActivation
 {
-    private readonly IList<PipeableCache<object, object>> _pipeableCaches = new List<PipeableCache<object, object>>();
     private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
     private readonly ServiceInjection _serviceInjection;
 
-    private bool _activated;
+    public bool Activated { get; private set; }
+
+    public ServiceLifetime ServiceLifetime { get; internal set; }
 
     public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation)
     {
@@ -58,11 +59,11 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
         return this;
     }
 
-    public ServicePipe<TInput, TOutput> Activate(IServiceProvider serviceProvider)
+    public void Activate(IServiceProvider serviceProvider)
     {
         if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
-        if (_activated)
+        if (Activated)
             throw new InvalidOperationException(
                 "Service pipe already activated. Use .Reset() before activating it again.");
 
@@ -74,9 +75,7 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
             _pipeableTypes.Add(pipeableType);
         }
 
-        _activated = true;
-
-        return this;
+        Activated = true;
     }
 
     public override void Reset()
@@ -85,12 +84,8 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>
 
         _pipeableTypes.Clear();
 
-        foreach (var pipeableCache in _pipeableCaches) pipeableCache.Clear();
-
-        _pipeableCaches.Clear();
-
         base.Reset();
 
-        _activated = false;
+        Activated = false;
     }
 }

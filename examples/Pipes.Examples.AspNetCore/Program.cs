@@ -26,7 +26,6 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-//TODO add pipe inheriting ServicePipe (no generic arguments)
 app.UsePipes()
     .Add(RequestPipes.Todo.Get)
     .Add(RequestPipes.Todo.GetAll)

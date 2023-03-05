@@ -21,6 +21,8 @@ public static class ServiceCollectionExtensions
             serviceCollection.Add(serviceDescriptor);
         }
 
+        servicePipe.ServiceLifetime = serviceLifetime;
+
         return serviceCollection;
     }
 

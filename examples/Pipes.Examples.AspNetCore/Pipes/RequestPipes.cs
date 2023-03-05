@@ -31,5 +31,7 @@ public static class RequestPipes
         {
             typeof(UpdateTodoItemAsync)
         };
+
+        public static readonly ServicePipe Test = new();
     }
 }
