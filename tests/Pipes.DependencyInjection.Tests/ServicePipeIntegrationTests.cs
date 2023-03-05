@@ -12,6 +12,34 @@ public class ServicePipeIntegrationTests
     };
 
     [Fact]
+    public void Test_MixedPipe()
+    {
+        var servicePipe = new ServicePipe<int>
+        {
+            typeof(ServicePipeable),
+            (int i) => i * 2
+        };
+
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddTransient(servicePipe);
+        serviceCollection.AddSingleton<CounterService>();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        servicePipe.Activate(serviceProvider);
+
+        var counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(0, counter.Value);
+
+        var result = servicePipe.Execute();
+        Assert.Equal(2, result);
+        Assert.Equal(2, servicePipe.Output);
+
+        counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(1, counter.Value);
+    }
+    
+    [Fact]
     public void Test_StaticServicePipe()
     {
         var serviceCollection = new ServiceCollection();

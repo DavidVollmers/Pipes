@@ -115,4 +115,20 @@ public class ServiceCollectionExtensionsTests
             sd.ServiceType == typeof(ServicePipeable) && sd.ImplementationType == typeof(ServicePipeable) &&
             sd.Lifetime == ServiceLifetime.Singleton)), Times.Once);
     }
+
+    [Fact]
+    public void Test_AddNonServicePipe()
+    {
+        var pipe = new Pipe
+        {
+            new ServicePipeable(null!)
+        };
+
+        var serviceCollection = new Mock<IServiceCollection>();
+
+        // ReSharper disable once InvokeAsExtensionMethod
+        ServiceCollectionExtensions.AddSingleton(serviceCollection.Object, pipe);
+
+        serviceCollection.Verify(sc => sc.Add(It.IsAny<ServiceDescriptor>()), Times.Never);
+    }
 }
