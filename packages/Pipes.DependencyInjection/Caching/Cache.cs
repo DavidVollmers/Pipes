@@ -5,25 +5,19 @@ namespace Pipes.DependencyInjection.Caching;
 
 public static class Cache
 {
-    private static IPipeable<object, object> CacheService(Type type, CacheFlags cacheFlags)
-    {
-        if (type == null) throw new ArgumentNullException(nameof(type));
-        return new PipeableServiceCache(type, cacheFlags);
-    }
-
     public static IPipeable<object, object> Output<T>()
     {
-        return CacheService(typeof(T), CacheFlags.Output);
+        return new PipeableServiceCache(typeof(T), CacheFlags.Output);
     }
 
     public static IPipeable<object, object> Input<T>()
     {
-        return CacheService(typeof(T), CacheFlags.Input);
+        return new PipeableServiceCache(typeof(T), CacheFlags.Input);
     }
 
     public static IPipeable<object, object> Everything<T>()
     {
-        return CacheService(typeof(T), CacheFlags.Input & CacheFlags.Output);
+        return new PipeableServiceCache(typeof(T), CacheFlags.Input & CacheFlags.Output);
     }
 
     public static IPipeable<object, object> Output<TInput, TOutput>(IPipeable<TInput, TOutput> pipeable)
