@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Pipes.Caching;
 using Pipes.Input;
 
 namespace Pipes;
@@ -54,6 +55,13 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
 
     public virtual void Reset()
     {
+        foreach (var pipeable in _pipeables)
+        {
+            if (pipeable is not IPipeableCache pipeableCache) continue;
+            
+            pipeableCache.Clear();
+        }
+        
         ResetOutput();
     }
 

@@ -4,7 +4,7 @@ using Pipes.Caching;
 
 namespace Pipes.DependencyInjection.Caching;
 
-internal class PipeableServiceCache : PipeableService
+internal class PipeableServiceCache : PipeableService, IPipeableCache
 {
     public PipeableServiceCache(Type type, CacheFlags cacheFlags) : base(type)
     {
@@ -34,5 +34,12 @@ internal class PipeableServiceCache : PipeableService
         var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
 
         return cacheHandler!.ExecuteAsync(this, pipe, cancellationToken);
+    }
+
+    public void Clear()
+    {
+        var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
+
+        cacheHandler!.Clear(this);
     }
 }

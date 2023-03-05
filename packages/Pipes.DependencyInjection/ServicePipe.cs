@@ -73,11 +73,11 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServicePipe
 
     public override void Reset()
     {
-        foreach (var pipeableType in _pipeableServices) pipeableType.Reset();
+        base.Reset();
+        
+        foreach (var pipeableService in _pipeableServices) pipeableService.Reset();
 
         _pipeableServices.Clear();
-
-        base.Reset();
 
         Activated = false;
     }

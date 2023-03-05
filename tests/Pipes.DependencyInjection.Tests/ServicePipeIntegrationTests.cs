@@ -160,10 +160,10 @@ public class ServicePipeIntegrationTests
 
         counter = scope.ServiceProvider.GetRequiredService<CounterService>();
         Assert.Equal(1, counter.Value);
-
-        scope.Dispose();
-
+        
         servicePipe.Reset();
+        scope.Dispose();
+        
         Assert.Equal(0, servicePipe.Output);
 
         servicePipe.Activate(serviceProvider);

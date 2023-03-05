@@ -16,7 +16,7 @@ internal class ServiceCacheHandler : IDisposable
     {
         var cache = VerifyCache(serviceCache);
 
-        var convertInputMethod = cache.GetType().GetMethod(nameof(ConvertInput))!;
+        var convertInputMethod = cache!.GetType().GetMethod(nameof(ConvertInput))!;
         return convertInputMethod.Invoke(cache, new[] { input });
     }
 
@@ -27,7 +27,7 @@ internal class ServiceCacheHandler : IDisposable
             TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
                 serviceCache.OutputType, pipe);
 
-        var executeMethod = cache.GetType().GetMethod(nameof(Execute));
+        var executeMethod = cache!.GetType().GetMethod(nameof(Execute));
         executeMethod!.Invoke(cache, new[] { genericPipe });
     }
 
@@ -39,15 +39,27 @@ internal class ServiceCacheHandler : IDisposable
             TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
                 serviceCache.OutputType, pipe);
 
-        var executeAsyncMethod = cache.GetType().GetMethod(nameof(ExecuteAsync));
+        var executeAsyncMethod = cache!.GetType().GetMethod(nameof(ExecuteAsync));
         return (Task)executeAsyncMethod!.Invoke(cache, new[] { genericPipe, cancellationToken })!;
     }
 
-    private object VerifyCache(PipeableServiceCache serviceCache)
+    public void Clear(PipeableServiceCache serviceCache)
+    {
+        var cache = VerifyCache(serviceCache, false);
+
+        if (cache == null) return;
+        
+        var clearMethod = cache.GetType().GetMethod(nameof(Clear));
+        clearMethod!.Invoke(cache, Array.Empty<object>());
+    }
+    
+    private object? VerifyCache(PipeableServiceCache serviceCache, bool createIfNotExists = true)
     {
         var key =
             $"{serviceCache.Type.FullName}<{serviceCache.InputType},{serviceCache.OutputType}>({serviceCache.CacheFlags})";
         if (_caches.ContainsKey(key)) return _caches[key];
+
+        if (!createIfNotExists) return null;
 
         var cache = TypeUtils.CreateGenericInstance(typeof(PipeableCache<,>), serviceCache.InputType,
             serviceCache.OutputType, serviceCache.Pipeable!, serviceCache.CacheFlags);

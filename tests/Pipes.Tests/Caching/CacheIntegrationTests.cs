@@ -6,27 +6,52 @@ namespace Pipes.Tests.Caching;
 public class CacheIntegrationTests
 {
     [Fact]
-    public void Test_CacheOutput()
+    public void Test_Execute_CacheOutput()
     {
-        var random = new Random();
-        var pipeable = new DelegatePipeable<object, int>(i => i, p => p.Pipe(random.Next()));
-        var pipe = new Pipe<int>
+        const int input = 4;
+        var pipeable = new DelegatePipeable<int, int>(i => (int) i!, p => p.Pipe(p.Input * 2));
+        var pipe = new Pipe<int, int>
         {
             Cache.Output(pipeable)
         };
 
-        var result1 = pipe.Execute();
-        Assert.True(result1 > 0);
+        var result1 = pipe.Execute(input);
+        Assert.Equal(8, result1);
         Assert.Equal(result1, pipe.Output);
 
-        var result2 = pipe.Execute();
+        var result2 = pipe.Execute(result1);
         Assert.Equal(result1, result2);
         Assert.Equal(result1, pipe.Output);
         
         pipe.Reset();
 
-        var result3 = pipe.Execute();
-        Assert.NotEqual(result1, result3);
+        var result3 = pipe.Execute(result2);
+        Assert.Equal(16, result3);
+        Assert.Equal(result3, pipe.Output);
+    }
+    
+    [Fact]
+    public async Task Test_ExecuteAsync_CacheOutput()
+    {
+        const int input = 4;
+        var pipeable = new DelegatePipeable<int, int>(i => (int) i!, p => p.Pipe(p.Input * 2));
+        var pipe = new Pipe<int, int>
+        {
+            Cache.Output(pipeable)
+        };
+
+        var result1 = await pipe.ExecuteAsync(input);
+        Assert.Equal(8, result1);
+        Assert.Equal(result1, pipe.Output);
+
+        var result2 = await pipe.ExecuteAsync(result1);
+        Assert.Equal(result1, result2);
+        Assert.Equal(result1, pipe.Output);
+        
+        pipe.Reset();
+
+        var result3 = await pipe.ExecuteAsync(result2);
+        Assert.Equal(16, result3);
         Assert.Equal(result3, pipe.Output);
     }
 }
