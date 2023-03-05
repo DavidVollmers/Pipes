@@ -3,11 +3,9 @@ using Pipes.Abstractions;
 
 namespace Pipes.DependencyInjection;
 
-internal class PipeableType : IPipeable<object, object>
+internal class PipeableService : IPipeable<object, object>, IPipeableService
 {
-    private ServiceInjection _serviceInjection;
-
-    public PipeableType(Type type)
+    public PipeableService(Type type)
     {
         Type = type;
 
@@ -16,10 +14,11 @@ internal class PipeableType : IPipeable<object, object>
 
         InputType = pipeableInterface.GenericTypeArguments[0];
         OutputType = pipeableInterface.GenericTypeArguments[1];
+
+        ServiceLifetime = ServiceLifetime.Transient;
     }
 
     protected IServiceProvider? ServiceProvider { get; private set; }
-
     public object? Pipeable { get; private set; }
     public Type InputType { get; }
     public Type OutputType { get; }
@@ -27,7 +26,7 @@ internal class PipeableType : IPipeable<object, object>
 
     public virtual object? ConvertInput(object? input)
     {
-        if (_serviceInjection == ServiceInjection.OnInput) ActivateType();
+        if (ServiceInjection == ServiceInjection.OnInput) ActivateType();
 
         if (Pipeable == null)
             throw new InvalidOperationException(
@@ -55,22 +54,34 @@ internal class PipeableType : IPipeable<object, object>
         return (Task)executeAsyncMethod!.Invoke(Pipeable, new[] { genericPipe, cancellationToken })!;
     }
 
+    public ServiceInjection ServiceInjection { get; private set; }
+
+    public bool Activated { get; private set; }
+
+    public ServiceLifetime ServiceLifetime { get; protected set; }
+
     public void Activate(IServiceProvider serviceProvider, ServiceInjection serviceInjection)
     {
-        _serviceInjection = serviceInjection;
+        if (Activated) return;
+
+        ServiceInjection = serviceInjection;
         ServiceProvider = serviceProvider;
 
-        if (_serviceInjection == ServiceInjection.OnActivation) ActivateType();
+        if (ServiceInjection == ServiceInjection.OnActivation) ActivateType();
     }
 
     public void Reset()
     {
         ServiceProvider = null;
         Pipeable = null;
+
+        Activated = false;
     }
 
     private void ActivateType()
     {
         Pipeable = ServiceProvider!.GetRequiredService(Type);
+
+        Activated = true;
     }
 }

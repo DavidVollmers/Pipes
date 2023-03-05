@@ -1,5 +1,4 @@
 using Pipes.AspNetCore;
-using Pipes.DependencyInjection;
 using Pipes.Examples.AspNetCore.Pipes;
 using Pipes.Examples.AspNetCore.Storage;
 
@@ -11,10 +10,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IStorageContext, InMemoryStorage>();
 
-builder.Services.AddScoped(RequestPipes.Todo.Get);
-builder.Services.AddScoped(RequestPipes.Todo.GetAll);
-builder.Services.AddScoped(RequestPipes.Todo.Update);
-builder.Services.AddScoped(RequestPipes.Todo.Create);
+//TODO try overriding service lifetime
+builder.Services.AddPipes()
+    .Add(RequestPipes.Todo.Get)
+    .Add(RequestPipes.Todo.GetAll)
+    .Add(RequestPipes.Todo.Update)
+    .Add(RequestPipes.Todo.Create);
 
 var app = builder.Build();
 
@@ -26,10 +27,6 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-app.UsePipes()
-    .Add(RequestPipes.Todo.Get)
-    .Add(RequestPipes.Todo.GetAll)
-    .Add(RequestPipes.Todo.Update)
-    .Add(RequestPipes.Todo.Create);
+app.UsePipes();
 
 app.Run();

@@ -2,13 +2,15 @@
 
 namespace Pipes.DependencyInjection;
 
-public interface IServiceActivation
+public interface IPipeableService
 {
     bool Activated { get; }
-    
+
+    ServiceInjection ServiceInjection { get; }
+
     ServiceLifetime ServiceLifetime { get; }
-    
-    void Activate(IServiceProvider serviceProvider);
+
+    void Activate(IServiceProvider serviceProvider, ServiceInjection serviceInjection);
 
     void Reset();
 }

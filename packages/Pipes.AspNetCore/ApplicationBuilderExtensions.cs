@@ -4,14 +4,12 @@ namespace Pipes.AspNetCore;
 
 public static class ApplicationBuilderExtensions
 {
-    public static PipeBuilder UsePipes(this IApplicationBuilder applicationBuilder)
+    public static IApplicationBuilder UsePipes(this IApplicationBuilder applicationBuilder)
     {
         if (applicationBuilder == null) throw new ArgumentNullException(nameof(applicationBuilder));
 
-        var pipeBuilder = new PipeBuilder();
+        applicationBuilder.UseMiddleware<ServiceActivationMiddleware>();
 
-        applicationBuilder.UseMiddleware<ServiceActivationMiddleware>(pipeBuilder.ServiceActivations);
-        
-        return pipeBuilder;
+        return applicationBuilder;
     }
 }

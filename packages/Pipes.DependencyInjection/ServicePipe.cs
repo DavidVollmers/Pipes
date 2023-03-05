@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Pipes.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
@@ -38,26 +37,20 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
     }
 }
 
-public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServiceActivation
+public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServicePipe
 {
-    private readonly IList<PipeableType> _pipeableTypes = new List<PipeableType>();
-    private readonly ServiceInjection _serviceInjection;
+    private readonly IList<IPipeableService> _pipeableServices = new List<IPipeableService>();
+
+    public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation)
+    {
+        ServiceInjection = serviceInjection;
+    }
+
+    public ServiceInjection ServiceInjection { get; }
 
     public bool Activated { get; private set; }
 
     public ServiceLifetime ServiceLifetime { get; internal set; }
-
-    public ServicePipe(ServiceInjection serviceInjection = ServiceInjection.OnActivation)
-    {
-        _serviceInjection = serviceInjection;
-    }
-
-    public ServicePipe<TInput, TOutput> Add(Type type)
-    {
-        if (type == null) throw new ArgumentNullException(nameof(type));
-        Add(new PipeableType(type));
-        return this;
-    }
 
     public void Activate(IServiceProvider serviceProvider)
     {
@@ -69,10 +62,10 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServiceActiv
 
         foreach (var pipeable in this)
         {
-            if (pipeable is not PipeableType pipeableType) continue;
+            if (pipeable is not PipeableService pipeableType) continue;
 
-            pipeableType.Activate(serviceProvider, _serviceInjection);
-            _pipeableTypes.Add(pipeableType);
+            pipeableType.Activate(serviceProvider, ServiceInjection);
+            _pipeableServices.Add(pipeableType);
         }
 
         Activated = true;
@@ -80,12 +73,24 @@ public class ServicePipe<TInput, TOutput> : Pipe<TInput, TOutput>, IServiceActiv
 
     public override void Reset()
     {
-        foreach (var pipeableType in _pipeableTypes) pipeableType.Reset();
+        foreach (var pipeableType in _pipeableServices) pipeableType.Reset();
 
-        _pipeableTypes.Clear();
+        _pipeableServices.Clear();
 
         base.Reset();
 
         Activated = false;
+    }
+
+    IEnumerator<IPipeableService> IEnumerable<IPipeableService>.GetEnumerator()
+    {
+        return _pipeableServices.GetEnumerator();
+    }
+
+    public ServicePipe<TInput, TOutput> Add(Type type)
+    {
+        if (type == null) throw new ArgumentNullException(nameof(type));
+        Add(new PipeableService(type));
+        return this;
     }
 }

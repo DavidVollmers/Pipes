@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Pipes.DependencyInjection;
 
 namespace Pipes.AspNetCore;
@@ -7,31 +6,21 @@ namespace Pipes.AspNetCore;
 //TODO https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-7.0#middleware-order
 internal class ServiceActivationMiddleware : IMiddleware
 {
-    private readonly IServiceActivation[] _serviceActivations;
+    private readonly IServicePipe[] _servicePipes;
 
-    public ServiceActivationMiddleware(IEnumerable<IServiceActivation> serviceActivations)
+    public ServiceActivationMiddleware(IEnumerable<IServicePipe> serviceActivations)
     {
-        _serviceActivations = serviceActivations.ToArray();
+        _servicePipes = serviceActivations.ToArray();
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        foreach (var service in _serviceActivations)
-        {
-            if (service.Activated) continue;
-            
-            service.Activate(context.RequestServices);
-        }
-        
+        foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeActivation(context.RequestServices);
+
         next(context);
 
-        foreach (var service in _serviceActivations)
-        {
-            if (service.ServiceLifetime != ServiceLifetime.Scoped) continue;
-            
-            service.Reset();
-        }
-        
+        foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeReset(context.RequestServices);
+
         return Task.CompletedTask;
     }
 }

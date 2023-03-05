@@ -6,16 +6,18 @@ namespace Pipes.DependencyInjection;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection Add<TInput, TOutput>(this IServiceCollection serviceCollection,
-        ServicePipe<TInput, TOutput> servicePipe, ServiceLifetime serviceLifetime)
+        Pipe<TInput, TOutput> pipe, ServiceLifetime serviceLifetime)
     {
         if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
-        if (servicePipe == null) throw new ArgumentNullException(nameof(servicePipe));
+        if (pipe == null) throw new ArgumentNullException(nameof(pipe));
+
+        if (pipe is not ServicePipe<TInput, TOutput> servicePipe) return serviceCollection;
 
         serviceCollection.AddScoped<ServiceCacheHandler>();
 
         foreach (var pipeable in servicePipe)
         {
-            if (pipeable is not PipeableType p) continue;
+            if (pipeable is not PipeableService p) continue;
 
             var serviceDescriptor = new ServiceDescriptor(p.Type, p.Type, serviceLifetime);
             serviceCollection.Add(serviceDescriptor);
@@ -27,20 +29,20 @@ public static class ServiceCollectionExtensions
     }
 
     public static IServiceCollection AddTransient<TInput, TOutput>(this IServiceCollection serviceCollection,
-        ServicePipe<TInput, TOutput> servicePipe)
+        Pipe<TInput, TOutput> pipe)
     {
-        return Add(serviceCollection, servicePipe, ServiceLifetime.Transient);
+        return Add(serviceCollection, pipe, ServiceLifetime.Transient);
     }
 
     public static IServiceCollection AddScoped<TInput, TOutput>(this IServiceCollection serviceCollection,
-        ServicePipe<TInput, TOutput> servicePipe)
+        Pipe<TInput, TOutput> pipe)
     {
-        return Add(serviceCollection, servicePipe, ServiceLifetime.Scoped);
+        return Add(serviceCollection, pipe, ServiceLifetime.Scoped);
     }
 
     public static IServiceCollection AddSingleton<TInput, TOutput>(this IServiceCollection serviceCollection,
-        ServicePipe<TInput, TOutput> servicePipe)
+        Pipe<TInput, TOutput> pipe)
     {
-        return Add(serviceCollection, servicePipe, ServiceLifetime.Singleton);
+        return Add(serviceCollection, pipe, ServiceLifetime.Singleton);
     }
 }

@@ -4,11 +4,13 @@ using Pipes.Caching;
 
 namespace Pipes.DependencyInjection.Caching;
 
-internal class PipeableServiceCache : PipeableType
+internal class PipeableServiceCache : PipeableService
 {
     public PipeableServiceCache(Type type, CacheFlags cacheFlags) : base(type)
     {
         CacheFlags = cacheFlags;
+
+        ServiceLifetime = ServiceLifetime.Scoped;
     }
 
     public CacheFlags CacheFlags { get; }
