@@ -155,6 +155,46 @@ public class ServicePipeIntegrationTests
     }
 
     [Fact]
+    public async Task Test_CacheOutputAsync()
+    {
+        var servicePipe = new ServicePipe<int>
+        {
+            Cache.Output<AsyncServicePipeable>()
+        };
+
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddTransient(servicePipe);
+        serviceCollection.AddSingleton<CounterService>();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        servicePipe.Activate(serviceProvider);
+
+        var counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(0, counter.Value);
+
+        var result = await servicePipe.ExecuteAsync();
+        Assert.Equal(1, result);
+        Assert.Equal(1, servicePipe.Output);
+
+        counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(1, counter.Value);
+
+        result = await servicePipe.ExecuteAsync();
+        Assert.Equal(1, result);
+        Assert.Equal(1, servicePipe.Output);
+
+        counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(1, counter.Value);
+
+        servicePipe.Reset();
+        Assert.Equal(0, servicePipe.Output);
+
+        counter = serviceProvider.GetRequiredService<CounterService>();
+        Assert.Equal(1, counter.Value);
+    }
+
+    [Fact]
     public void Test_CacheOutput_Scoped()
     {
         var servicePipe = new ServicePipe<int>

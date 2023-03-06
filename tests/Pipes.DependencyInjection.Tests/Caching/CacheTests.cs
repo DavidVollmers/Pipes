@@ -1,4 +1,5 @@
-﻿using Pipes.DependencyInjection.Caching;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Pipes.DependencyInjection.Caching;
 using Pipes.DependencyInjection.Tests.Pipeables;
 
 namespace Pipes.DependencyInjection.Tests.Caching;
@@ -15,18 +16,18 @@ public class CacheTests
     [Fact]
     public void Test_Output()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Output(new ServicePipeable(null!))
         };
         
-        Assert.Single(pipe);
+        Assert.Single<IPipeable<object, object>>(pipe);
     }
     
     [Fact]
     public void Test_Output_Service()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Output<ServicePipeable>()
         };
@@ -44,18 +45,18 @@ public class CacheTests
     [Fact]
     public void Test_Input()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Input(new ServicePipeable(null!))
         };
         
-        Assert.Single(pipe);
+        Assert.Single<IPipeable<object, object>>(pipe);
     }
     
     [Fact]
     public void Test_Input_Service()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Input<ServicePipeable>()
         };
@@ -73,22 +74,43 @@ public class CacheTests
     [Fact]
     public void Test_Everything()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Everything(new ServicePipeable(null!))
+        };
+        
+        Assert.Single<IPipeable<object, object>>(pipe);
+    }
+    
+    [Fact]
+    public void Test_Everything_Service()
+    {
+        var pipe = new ServicePipe
+        {
+            Cache.Everything<ServicePipeable>()
         };
         
         Assert.Single(pipe);
     }
     
     [Fact]
-    public void Test_Everything_Service()
+    public void Test_Everything_ClearCacheWithoutValue()
     {
-        var pipe = new Pipe
+        var pipe = new ServicePipe
         {
             Cache.Everything<ServicePipeable>()
         };
         
         Assert.Single(pipe);
+
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddTransient(pipe);
+        serviceCollection.AddSingleton<CounterService>();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        
+        pipe.Activate(serviceProvider);
+        
+        pipe.Reset();
     }
 }
