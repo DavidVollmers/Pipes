@@ -10,7 +10,7 @@ namespace Pipes.Examples.AspNetCore.Controllers;
 public class TodoController : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<TodoItem>> GetAllTodoItemAsync([FromQuery] string? requestedBy = null,
+    public async Task<ActionResult<TodoItem[]>> GetAllTodoItemAsync([FromQuery] string? requestedBy = null,
         CancellationToken cancellationToken = default)
     {
         if (requestedBy != null) Login(requestedBy);
