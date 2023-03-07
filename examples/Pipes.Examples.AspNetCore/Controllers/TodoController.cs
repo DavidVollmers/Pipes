@@ -56,7 +56,7 @@ public class TodoController : ControllerBase
 
         var existing = await RequestPipes.Todo.Get.ExecuteAsync(id, cancellationToken).ConfigureAwait(false);
 
-        if (existing == null) return NotFound();
+        if (existing == null || existing.CreatedBy != requestedBy) return NotFound();
 
         var item = await RequestPipes.Todo.Update.ExecuteAsync(request, cancellationToken);
 

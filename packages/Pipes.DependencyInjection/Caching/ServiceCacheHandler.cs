@@ -23,24 +23,20 @@ internal class ServiceCacheHandler : IDisposable
     public void Execute(PipeableServiceCache serviceCache, IPipe<object, object?> pipe)
     {
         var cache = VerifyCache(serviceCache);
-        var genericPipe =
-            TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
-                serviceCache.OutputType, pipe);
 
         var executeMethod = cache!.GetType().GetMethod(nameof(Execute));
-        executeMethod!.Invoke(cache, new[] { genericPipe });
+        executeMethod!.Invoke(cache, new object[] { pipe });
     }
 
-    public Task ExecuteAsync(PipeableServiceCache serviceCache, IPipe<object, object?> pipe,
+    public async Task ExecuteAsync(PipeableServiceCache serviceCache, IPipe<object, object?> pipe,
         CancellationToken cancellationToken = default)
     {
         var cache = VerifyCache(serviceCache);
-        var genericPipe =
-            TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), serviceCache.InputType,
-                serviceCache.OutputType, pipe);
 
         var executeAsyncMethod = cache!.GetType().GetMethod(nameof(ExecuteAsync));
-        return (Task)executeAsyncMethod!.Invoke(cache, new[] { genericPipe, cancellationToken })!;
+        var task = (Task)executeAsyncMethod!.Invoke(cache, new object[] { pipe, cancellationToken })!;
+
+        await task.ConfigureAwait(false);
     }
 
     public void Clear(PipeableServiceCache serviceCache)
