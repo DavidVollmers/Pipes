@@ -1,6 +1,4 @@
-﻿using Moq;
-using Pipes.Abstractions;
-using Pipes.IO;
+﻿using Pipes.IO;
 
 namespace Pipes.Tests.IO;
 
@@ -11,20 +9,20 @@ public class EnumerateFilesTests
     {
         var pipeable = new EnumerateFiles();
 
-        var result = pipeable.ConvertInput(null);
-        Assert.Null(result);
+        var exception = Assert.Throws<PipeInputNullException>(() => pipeable.ConvertInput(null));
+        Assert.Equal("input", exception.InputName);
     }
 
     [Fact]
     public void Test_ConvertInput_String()
     {
         var input = Guid.NewGuid().ToString();
-        
+
         var pipeable = new EnumerateFiles();
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.Equal(input, result!.SearchPattern);
+        Assert.Equal(input, result.SearchPattern);
     }
 
     [Fact]
@@ -34,12 +32,12 @@ public class EnumerateFilesTests
         {
             SearchPattern = Guid.NewGuid().ToString()
         };
-        
+
         var pipeable = new EnumerateFiles();
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.Equal(input.SearchPattern, result!.SearchPattern);
+        Assert.Equal(input.SearchPattern, result.SearchPattern);
     }
 
     [Fact]

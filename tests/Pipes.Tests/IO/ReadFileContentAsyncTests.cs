@@ -1,7 +1,5 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
-using Moq;
-using Pipes.Abstractions;
 using Pipes.IO;
 
 namespace Pipes.Tests.IO;
@@ -13,8 +11,8 @@ public class ReadFileContentAsyncTests
     {
         var pipeable = new ReadFileContentAsync();
 
-        var result = pipeable.ConvertInput(null);
-        Assert.Null(result);
+        var exception = Assert.Throws<PipeInputNullException>(() => pipeable.ConvertInput(null));
+        Assert.Equal("input", exception.InputName);
     }
 
     [Fact]
@@ -26,7 +24,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input, result.File!.FullName);
     }
 
@@ -39,7 +37,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input.FullName, result.File!.FullName);
     }
 
@@ -55,7 +53,7 @@ public class ReadFileContentAsyncTests
 
         var result = pipeable.ConvertInput(input);
         Assert.NotNull(result);
-        Assert.NotNull(result!.File);
+        Assert.NotNull(result.File);
         Assert.Equal(input.File.FullName, result.File!.FullName);
     }
 

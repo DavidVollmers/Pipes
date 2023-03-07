@@ -9,7 +9,7 @@ public class PipeInputNotSupportedExceptionTests
         var targetType = typeof(string);
         var expectedMessage =
             $"Input of type \"{inputType.FullName}\" is not supported. Expected input type \"{targetType.FullName}\" or a valid conversion.";
-        
+
         var exception = new PipeInputNotSupportedException(inputType, targetType);
         Assert.Equal(expectedMessage, exception.Message);
         Assert.Equal(inputType, exception.InputType);

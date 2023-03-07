@@ -1,22 +1,19 @@
-﻿using Pipes.Abstractions;
+﻿using Pipes.Input;
 
 namespace Pipes.IO;
 
 public sealed class EnumerateFiles : Pipeable<EnumerateFilesOptions, IEnumerable<string>>
 {
-    public override EnumerateFilesOptions? ConvertInput(object? input)
+    public override EnumerateFilesOptions ConvertInput(object? input)
     {
-        if (input == null) return null;
-
-        if (InputConverter.TryConvertInput(input, out EnumerateFilesOptions? convertedInput)) return convertedInput;
-
-        if (InputConverter.TryConvertInput(input, out string? searchPattern))
-            return new EnumerateFilesOptions
+        return InputConverter.ConvertInputByTypeMap(input, new TypeMap<EnumerateFilesOptions>
+        {
+            (EnumerateFilesOptions o) => o,
+            (string s) => new EnumerateFilesOptions
             {
-                SearchPattern = searchPattern
-            };
-
-        throw new PipeInputNotSupportedException(input.GetType(), typeof(EnumerateFilesOptions));
+                SearchPattern = s
+            }
+        });
     }
 
     public override void Execute(IPipe<EnumerateFilesOptions, IEnumerable<string>> pipe)

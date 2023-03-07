@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>DavidVollmers.Pipes.Input</PackageId>
+        <Authors>github@david.vollmers.org</Authors>
+        <Copyright>David Vollmers</Copyright>
+        <Description>Provides pipe input utilities for DavidVollmers.Pipes.</Description>
+        <PackageProjectUrl>https://github.com/DavidVollmers/Pipes</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/DavidVollmers/Pipes.git</RepositoryUrl>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Pipes.Abstractions\Pipes.Abstractions.csproj"/>
+    </ItemGroup>
+
+</Project>

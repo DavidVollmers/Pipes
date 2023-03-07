@@ -26,6 +26,28 @@ public class PipeTests
     }
 
     [Fact]
+    public void Test_Execute_WithOutput_NoPipeables()
+    {
+        var pipe = new Pipe<object>();
+
+        var output = pipe.Execute();
+        Assert.Null(output);
+
+        Assert.Null(pipe.Output);
+    }
+
+    [Fact]
+    public async Task Test_ExecuteAsync_WithOutput_NoPipeables()
+    {
+        var pipe = new Pipe<object>();
+
+        var output = await pipe.ExecuteAsync();
+        Assert.Null(output);
+
+        Assert.Null(pipe.Output);
+    }
+
+    [Fact]
     public void Test_Output_Default()
     {
         var objectPipe = new Pipe();
@@ -38,15 +60,15 @@ public class PipeTests
     [Fact]
     public async Task Test_Output_Async()
     {
-        var i = new Random().Next();
+        var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
-        var result = await pipe.ExecuteAsync(i);
-        Assert.Equal(i * 2, result);
-        Assert.Equal(i * 2, pipe.Output);
+        var result = await pipe.ExecuteAsync(integer);
+        Assert.Equal(integer * 2, result);
+        Assert.Equal(integer * 2, pipe.Output);
     }
 
     [Fact]
@@ -55,7 +77,7 @@ public class PipeTests
         var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
         var result = pipe.Execute(integer);
@@ -68,7 +90,7 @@ public class PipeTests
     {
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate(i => i, p => p.Pipe(null))
+            new DelegatePipeable(i => i, p => p.Pipe(null))
         };
 
         var result = pipe.Execute(1337);
@@ -82,7 +104,7 @@ public class PipeTests
         var integer = new Random().Next();
         var pipe = new Pipe<int, int>
         {
-            new PipeableDelegate<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
+            new DelegatePipeable<int, int>(i => (int)i!, p => p.Pipe(p.Input * 2))
         };
 
         var result = await pipe.ExecuteAsync(integer);
@@ -94,13 +116,12 @@ public class PipeTests
     }
 
     [Fact]
-    public void Test_GetEnumerator()
+    public void Test_AddAndGetEnumerator()
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
-        var pipe = new Pipe
-        {
-            new EmptyPipeable()
-        };
+        var pipe = new Pipe();
+
+        pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
         Assert.Collection(pipe,
@@ -109,18 +130,14 @@ public class PipeTests
     }
 
     [Fact]
-    public void Test_GetEnumerator_IEnumerableCast()
+    public void Test_AddAndGetEnumerator_IEnumerableCast()
     {
         // ReSharper disable once UseObjectOrCollectionInitializer
-        var pipe = new Pipe
-        {
-            new EmptyPipeable()
-        };
+        var pipe = new Pipe();
+
+        pipe.Add(new EmptyPipeable());
         pipe.Add(new EmptyPipeable());
 
-        foreach (var result in (IEnumerable) pipe)
-        {
-            Assert.IsType<EmptyPipeable>(result);
-        }
+        foreach (var result in (IEnumerable)pipe) Assert.IsType<EmptyPipeable>(result);
     }
 }

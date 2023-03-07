@@ -4,7 +4,7 @@
 [![](https://img.shields.io/github/v/release/DavidVollmers/Pipes?include_prereleases&style=flat-square)](https://github.com/DavidVollmers/Pipes/releases)
 [![](https://img.shields.io/github/license/DavidVollmers/Pipes?style=flat-square)](https://github.com/DavidVollmers/Pipes/blob/main/LICENSE.txt)
 
-Abstractions for `DavidVollmers.Pipes`.
+Provides abstractions for `DavidVollmers.Pipes`.
 
 ## Installation
 

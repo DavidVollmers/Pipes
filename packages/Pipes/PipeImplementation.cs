@@ -1,18 +1,15 @@
-﻿using Pipes.Abstractions;
-
-namespace Pipes;
+﻿namespace Pipes;
 
 internal sealed class PipeImplementation : PipeBase
 {
     private const string PipeNotExecutedProperlyException =
         "Pipe was not executed properly. Make sure to either call .Pipe() or .PipeAsync() when implementing custom pipeables.";
 
+    private readonly CancellationToken _cancellationToken;
+    private readonly int _nextPipeLocation;
+
     private readonly PipeOutput _output;
     private readonly IPipeable<object, object>[] _pipeables;
-    private readonly int _nextPipeLocation;
-    private readonly CancellationToken _cancellationToken;
-
-    public override object? Input { get; }
 
     public PipeImplementation(PipeOutput output, IEnumerable<IPipeable<object, object>> pipeables,
         int pipeLocation, object? input, CancellationToken cancellationToken)
@@ -24,6 +21,8 @@ internal sealed class PipeImplementation : PipeBase
 
         Input = input;
     }
+
+    public override object? Input { get; }
 
     public override void Pipe(object? input)
     {
