@@ -16,8 +16,8 @@ internal class GenericPipeImplementation<TInput, TOutput> : IPipe<TInput, TOutpu
         _inner.Pipe(input);
     }
 
-    public Task PipeAsync(TOutput? input, CancellationToken cancellationToken = default)
+    public async Task PipeAsync(TOutput? input, CancellationToken cancellationToken = default)
     {
-        return _inner.PipeAsync(input, cancellationToken);
+        await _inner.PipeAsync(input, cancellationToken).ConfigureAwait(false);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Pipes.Abstractions;
-using Pipes.DependencyInjection.Caching;
 using Pipes.Input;
 
 namespace Pipes.DependencyInjection;
@@ -16,9 +15,9 @@ public class ServicePipe : ServicePipe<object, object>
         Execute(PipeInput.Empty);
     }
 
-    public Task ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+        await ExecuteAsync(PipeInput.Empty, cancellationToken).ConfigureAwait(false);
     }
 }
 
@@ -33,9 +32,9 @@ public class ServicePipe<TOutput> : ServicePipe<object, TOutput>
         return Execute(PipeInput.Empty);
     }
 
-    public Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+        return await ExecuteAsync(PipeInput.Empty, cancellationToken).ConfigureAwait(false);
     }
 }
 

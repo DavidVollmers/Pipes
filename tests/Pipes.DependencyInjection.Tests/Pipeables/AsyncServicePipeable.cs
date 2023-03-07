@@ -13,8 +13,6 @@ public class AsyncServicePipeable : Pipeable
     {
         _counter.Increment();
 
-        pipe.Pipe(_counter.Value);
-
-        return Task.CompletedTask;
+        return pipe.PipeAsync(_counter.Value, cancellationToken);
     }
 }

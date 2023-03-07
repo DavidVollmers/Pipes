@@ -52,14 +52,18 @@ internal class PipeableCache<TInput, TOutput> : IPipeable<object, object>, IPipe
         _pipeable.Execute(cachePipe!);
     }
 
-    public Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
     {
-        if (_outputCached) return pipe.PipeAsync(OutputCache, cancellationToken);
+        if (_outputCached)
+        {
+            await pipe.PipeAsync(OutputCache, cancellationToken).ConfigureAwait(false);
+            return;
+        }
 
         var cachePipe =
             new OutputCachePipeImplementation<TInput, TOutput>(this,
                 new GenericPipeImplementation<TInput, TOutput?>(pipe));
-        return _pipeable.ExecuteAsync(cachePipe!, cancellationToken);
+        await _pipeable.ExecuteAsync(cachePipe!, cancellationToken).ConfigureAwait(false);
     }
 
     public void Clear()

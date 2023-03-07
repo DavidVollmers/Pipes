@@ -19,8 +19,9 @@ internal class GenericPipeable<TInput, TOutput> : IPipeable<object, object>
         _inner.Execute(new GenericPipeImplementation<TInput, TOutput?>(pipe));
     }
 
-    public Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
     {
-        return _inner.ExecuteAsync(new GenericPipeImplementation<TInput, TOutput?>(pipe), cancellationToken);
+        await _inner.ExecuteAsync(new GenericPipeImplementation<TInput, TOutput?>(pipe), cancellationToken)
+            .ConfigureAwait(false);
     }
 }

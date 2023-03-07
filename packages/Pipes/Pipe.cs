@@ -11,9 +11,9 @@ public class Pipe : Pipe<object, object>
         Execute(PipeInput.Empty);
     }
 
-    public Task ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+        await ExecuteAsync(PipeInput.Empty, cancellationToken).ConfigureAwait(false);
     }
 }
 
@@ -24,9 +24,9 @@ public class Pipe<TOutput> : Pipe<object, TOutput>
         return Execute(PipeInput.Empty);
     }
 
-    public Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task<TOutput?> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        return ExecuteAsync(PipeInput.Empty, cancellationToken);
+        return await ExecuteAsync(PipeInput.Empty, cancellationToken).ConfigureAwait(false);
     }
 }
 
@@ -58,10 +58,10 @@ public class Pipe<TInput, TOutput> : PipeOutput, IEnumerable<IPipeable<object, o
         foreach (var pipeable in _pipeables)
         {
             if (pipeable is not IPipeableCache pipeableCache) continue;
-            
+
             pipeableCache.Clear();
         }
-        
+
         ResetOutput();
     }
 

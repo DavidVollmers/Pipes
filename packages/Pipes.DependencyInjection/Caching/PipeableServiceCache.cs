@@ -27,11 +27,11 @@ internal class PipeableServiceCache : PipeableService, IPipeableCache
         cacheHandler!.Execute(this, pipe);
     }
 
-    public override Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
+    public override async Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
     {
         var cacheHandler = ServiceProvider!.GetService<ServiceCacheHandler>();
 
-        return cacheHandler!.ExecuteAsync(this, pipe, cancellationToken);
+        await cacheHandler!.ExecuteAsync(this, pipe, cancellationToken).ConfigureAwait(false);
     }
 
     public void Clear()

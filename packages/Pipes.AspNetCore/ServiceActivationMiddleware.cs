@@ -13,14 +13,12 @@ internal class ServiceActivationMiddleware : IMiddleware
         _servicePipes = serviceActivations.ToArray();
     }
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeActivation(context.RequestServices);
 
-        next(context);
+        await next(context).ConfigureAwait(false);
 
         foreach (var servicePipe in _servicePipes) servicePipe.EnsureScopeReset();
-
-        return Task.CompletedTask;
     }
 }

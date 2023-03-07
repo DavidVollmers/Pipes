@@ -10,12 +10,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IStorageContext, InMemoryStorage>();
 
-//TODO try overriding service lifetime
 builder.Services.AddPipes()
-    .Add(RequestPipes.Todo.Get)
-    .Add(RequestPipes.Todo.GetAll)
-    .Add(RequestPipes.Todo.Update)
-    .Add(RequestPipes.Todo.Create);
+    .AddScoped(RequestPipes.Todo.Get)
+    .AddScoped(RequestPipes.Todo.GetAll)
+    .AddScoped(RequestPipes.Todo.Update)
+    .AddScoped(RequestPipes.Todo.Create);
 
 var app = builder.Build();
 

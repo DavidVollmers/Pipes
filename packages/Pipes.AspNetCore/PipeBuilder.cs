@@ -15,11 +15,26 @@ public sealed class PipeBuilder
 
     internal IEnumerable<IServicePipe> ServicePipes => _servicePipes;
 
-    public PipeBuilder Add<TInput, TOutput>(Pipe<TInput, TOutput> pipe)
+    public PipeBuilder Add<TInput, TOutput>(Pipe<TInput, TOutput> pipe, ServiceLifetime serviceLifetime)
     {
         if (pipe == null) throw new ArgumentNullException(nameof(pipe));
-        _serviceCollection.AddTransient(pipe);
+        _serviceCollection.Add(pipe, serviceLifetime);
         if (pipe is ServicePipe<TInput, TOutput> servicePipe) _servicePipes.Add(servicePipe);
         return this;
+    }
+
+    public PipeBuilder AddTransient<TInput, TOutput>(Pipe<TInput, TOutput> pipe)
+    {
+        return Add(pipe, ServiceLifetime.Transient);
+    }
+
+    public PipeBuilder AddScoped<TInput, TOutput>(Pipe<TInput, TOutput> pipe)
+    {
+        return Add(pipe, ServiceLifetime.Scoped);
+    }
+
+    public PipeBuilder AddSingleton<TInput, TOutput>(Pipe<TInput, TOutput> pipe)
+    {
+        return Add(pipe, ServiceLifetime.Singleton);
     }
 }

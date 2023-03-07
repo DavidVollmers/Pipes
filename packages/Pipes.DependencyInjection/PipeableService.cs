@@ -43,13 +43,15 @@ internal class PipeableService : IPipeable<object, object>, IPipeableService
         executeMethod!.Invoke(Pipeable, new[] { genericPipe });
     }
 
-    public virtual Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
+    public virtual async Task ExecuteAsync(IPipe<object, object?> pipe, CancellationToken cancellationToken = default)
     {
         var genericPipe =
             TypeUtils.CreateGenericInstance(typeof(GenericPipeImplementation<,>), InputType, OutputType, pipe);
 
         var executeAsyncMethod = Type.GetMethod(nameof(ExecuteAsync));
-        return (Task)executeAsyncMethod!.Invoke(Pipeable, new[] { genericPipe, cancellationToken })!;
+        var task = (Task)executeAsyncMethod!.Invoke(Pipeable, new[] { genericPipe, cancellationToken })!;
+
+        await task.ConfigureAwait(false);
     }
 
     public ServiceInjection ServiceInjection { get; private set; }

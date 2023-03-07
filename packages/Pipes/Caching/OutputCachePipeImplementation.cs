@@ -19,9 +19,9 @@ internal class OutputCachePipeImplementation<TInput, TOutput> : IPipe<TInput, TO
         _pipe.Pipe(input);
     }
 
-    public Task PipeAsync(TOutput? input, CancellationToken cancellationToken = default)
+    public async Task PipeAsync(TOutput? input, CancellationToken cancellationToken = default)
     {
         _pipeable.OutputCache = input;
-        return _pipe.PipeAsync(input, cancellationToken);
+        await _pipe.PipeAsync(input, cancellationToken).ConfigureAwait(false);
     }
 }
