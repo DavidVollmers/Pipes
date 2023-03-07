@@ -15,8 +15,11 @@ public class ApplicationBuilderExtensionsTests
     [Fact]
     public void Test_UsePipes()
     {
+        var serviceProvider = new Mock<IServiceProvider>();
+        
         var applicationBuilder = new Mock<IApplicationBuilder>();
-
+        applicationBuilder.Setup(ab => ab.ApplicationServices).Returns(serviceProvider.Object);
+        
         // ReSharper disable once InvokeAsExtensionMethod
         ApplicationBuilderExtensions.UsePipes(applicationBuilder.Object);
         

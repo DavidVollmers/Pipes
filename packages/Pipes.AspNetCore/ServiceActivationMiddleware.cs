@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Pipes.DependencyInjection;
 
 namespace Pipes.AspNetCore;
@@ -8,9 +9,10 @@ internal class ServiceActivationMiddleware : IMiddleware
 {
     private readonly IServicePipe[] _servicePipes;
 
-    public ServiceActivationMiddleware(IEnumerable<IServicePipe> serviceActivations)
+    public ServiceActivationMiddleware(IServiceProvider serviceProvider)
     {
-        _servicePipes = serviceActivations.ToArray();
+        var servicePipes = serviceProvider.GetService<IEnumerable<IServicePipe>>();
+        _servicePipes = servicePipes == null ? Array.Empty<IServicePipe>() : servicePipes.ToArray();
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)

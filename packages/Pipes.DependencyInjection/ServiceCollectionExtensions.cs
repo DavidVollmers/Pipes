@@ -19,12 +19,11 @@ public static class ServiceCollectionExtensions
         {
             if (pipeable is not PipeableService pipeableService) continue;
 
-            var serviceDescriptor = new ServiceDescriptor(pipeableService.Type, pipeableService.Type, serviceLifetime);
-            serviceCollection.Add(serviceDescriptor);
-
+            serviceCollection.Add(new ServiceDescriptor(pipeableService.Type, pipeableService.Type, serviceLifetime));
             pipeableService.ServiceLifetime = serviceLifetime;
         }
 
+        serviceCollection.Add(new ServiceDescriptor(typeof(IServicePipe), servicePipe));
         servicePipe.ServiceLifetime = serviceLifetime;
 
         return serviceCollection;

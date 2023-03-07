@@ -59,7 +59,7 @@ public class ServiceCollectionExtensionsTests
         // ReSharper disable once InvokeAsExtensionMethod
         ServiceCollectionExtensions.Add(serviceCollection.Object, servicePipe, ServiceLifetime.Transient);
 
-        serviceCollection.Verify(sc => sc.Add(It.IsAny<ServiceDescriptor>()), Times.Once);
+        serviceCollection.Verify(sc => sc.Add(It.IsAny<ServiceDescriptor>()), Times.Exactly(2));
     }
 
     [Fact]
@@ -78,6 +78,9 @@ public class ServiceCollectionExtensionsTests
         serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
             sd.ServiceType == typeof(ServicePipeable) && sd.ImplementationType == typeof(ServicePipeable) &&
             sd.Lifetime == ServiceLifetime.Transient)), Times.Once);
+        serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
+            sd.ServiceType == typeof(IServicePipe) && sd.ImplementationInstance == servicePipe &&
+            sd.Lifetime == ServiceLifetime.Singleton)), Times.Once);
     }
 
     [Fact]
@@ -96,6 +99,9 @@ public class ServiceCollectionExtensionsTests
         serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
             sd.ServiceType == typeof(ServicePipeable) && sd.ImplementationType == typeof(ServicePipeable) &&
             sd.Lifetime == ServiceLifetime.Scoped)), Times.Once);
+        serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
+            sd.ServiceType == typeof(IServicePipe) && sd.ImplementationInstance == servicePipe &&
+            sd.Lifetime == ServiceLifetime.Singleton)), Times.Once);
     }
 
     [Fact]
@@ -113,6 +119,9 @@ public class ServiceCollectionExtensionsTests
 
         serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
             sd.ServiceType == typeof(ServicePipeable) && sd.ImplementationType == typeof(ServicePipeable) &&
+            sd.Lifetime == ServiceLifetime.Singleton)), Times.Once);
+        serviceCollection.Verify(sc => sc.Add(It.Is<ServiceDescriptor>(sd =>
+            sd.ServiceType == typeof(IServicePipe) && sd.ImplementationInstance == servicePipe &&
             sd.Lifetime == ServiceLifetime.Singleton)), Times.Once);
     }
 

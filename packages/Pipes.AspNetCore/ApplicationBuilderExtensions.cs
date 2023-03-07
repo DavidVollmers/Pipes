@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Pipes.DependencyInjection;
 
 namespace Pipes.AspNetCore;
 
@@ -11,11 +12,14 @@ public static class ApplicationBuilderExtensions
 
         applicationBuilder.UseMiddleware<ServiceActivationMiddleware>();
 
-        var pipeBuilder = applicationBuilder.ApplicationServices.GetRequiredService<PipeBuilder>();
-        foreach (var servicePipe in pipeBuilder.ServicePipes)
+        var servicePipes = applicationBuilder.ApplicationServices.GetService<IEnumerable<IServicePipe>>();
+        if (servicePipes != null)
         {
-            if (servicePipe is { Activated: false, ServiceLifetime: ServiceLifetime.Singleton })
-                servicePipe.Activate(applicationBuilder.ApplicationServices);
+            foreach (var servicePipe in servicePipes)
+            {
+                if (servicePipe is { Activated: false, ServiceLifetime: ServiceLifetime.Singleton })
+                    servicePipe.Activate(applicationBuilder.ApplicationServices);
+            }
         }
 
         return applicationBuilder;

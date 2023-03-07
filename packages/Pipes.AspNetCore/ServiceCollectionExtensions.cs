@@ -9,9 +9,8 @@ public static class ServiceCollectionExtensions
         if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
 
         var pipeBuilder = new PipeBuilder(serviceCollection);
-        serviceCollection.AddSingleton(pipeBuilder);
         
-        serviceCollection.AddScoped(_ => new ServiceActivationMiddleware(pipeBuilder.ServicePipes));
+        serviceCollection.AddScoped<ServiceActivationMiddleware>();
 
         return pipeBuilder;
     }

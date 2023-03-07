@@ -43,5 +43,10 @@ public class TodoControllerTests : IClassFixture<TestWebApplicationFactory>
                 Assert.NotNull(result);
                 Assert.Equal(todoItems[0].Id, result.Id);
             });
+        
+        _factory.Mock<IStorageContext>(mock =>
+        {
+            mock.Verify(sc => sc.GetAllTodoItemsAsync(), Times.Once);
+        });
     }
 }
